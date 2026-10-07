@@ -1,0 +1,21 @@
+{
+  "name": "Agendus Web",
+  "short_name": "Agendus",
+  "description": "Agenda, calendar, tasks, contacts and memos in one place. A tribute to Agendus for Palm OS.",
+  "start_url": "./#/agenda",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#1b4fa8",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "New task", "url": "./#/tasks" },
+    { "name": "Month", "url": "./#/month" }
+  ]
+}

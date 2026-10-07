@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Agendus Web</title>
+    <meta name="description" content="A mobile-first web version of Agendus, the classic Palm OS organizer: agenda, calendar, tasks, contacts and memos in one place.">
+    <meta name="theme-color" content="#1b4fa8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Agendus">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="stylesheet" href="css/app.css">
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      try {
+        var s = JSON.parse(localStorage.getItem('agendus.v1') || '{}').settings || {};
+        document.documentElement.dataset.theme = s.theme || 'auto';
+      } catch (e) {
+        document.documentElement.dataset.theme = 'auto';
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="titlebar">
+        <button class="title-tab" id="title" data-act="title-tap"></button>
+        <div class="title-actions">
+          <label class="cat-filter">
+            <span class="sr-only" data-i18n="filter.label">Category</span>
+            <select id="cat-filter" data-change="cat-filter"></select>
+          </label>
+          <button class="icon-btn" data-act="search" id="btn-search"></button>
+          <button class="icon-btn" data-act="goto-settings" id="btn-settings"></button>
+        </div>
+      </header>
+      <div class="subbar" id="subbar"></div>
+      <main id="main" tabindex="-1"></main>
+      <button class="fab" id="fab" data-act="fab"></button>
+      <nav class="toolbar" id="toolbar"></nav>
+    </div>
+    <div id="sheet-root"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <noscript>Agendus Web needs JavaScript.</noscript>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
