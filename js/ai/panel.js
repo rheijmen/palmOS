@@ -1,6 +1,7 @@
-// The assistant's face: a dark dashboard with a sweeping scanner (thinking), a
-// three-column voice box (speaking/listening), and one big microphone button.
-// Plus the slim proactive strip at the top of the Agenda.
+// The assistant's face, in the Agendus 2007 style: a glossy LCD with a light that
+// sweeps across while it thinks and a three-column voice box that lights up while
+// it talks (a nod to the talking cars of 1980s TV), indicator lamps, speech bubbles
+// and one big Talk button. Plus the slim proactive strip at the top of the Agenda.
 import { state } from '../store.js';
 import { esc } from '../util.js';
 import { t } from '../i18n.js';
@@ -13,9 +14,9 @@ import { listen, stopListening, canListen, speak, stopSpeaking, isSpeaking, voic
 const aiName = () => state.settings.aiName || 'Pilot';
 
 function actionChip(a) {
-  if (a.href) return `<a class="kitt-chip" href="${esc(a.href)}" ${a.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${esc(a.label)}</a>`;
+  if (a.href) return `<a class="pilot-chip" href="${esc(a.href)}" ${a.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${esc(a.label)}</a>`;
   const data = Object.entries(a.data || {}).map(([k, v]) => `data-${k}="${esc(v)}"`).join(' ');
-  return `<button class="kitt-chip" data-act="${a.act}" ${data}>${esc(a.label)}</button>`;
+  return `<button class="pilot-chip" data-act="${a.act}" ${data}>${esc(a.label)}</button>`;
 }
 
 function effectChip(e) {
@@ -33,12 +34,12 @@ function effectChip(e) {
 export function assistantStrip() {
   if (!state.settings.aiProactive) return '';
   const top = computeInsights()[0];
-  return `<div class="kitt-strip ${top ? 'has-news' : ''}">
+  return `<div class="pilot-strip ${top ? 'has-news' : ''}">
     <button class="ks-main" data-act="ai-open" aria-label="${esc(t('ai.talkTo', { name: aiName() }))}">
       <span class="ks-scanner" aria-hidden="true"><i></i></span>
       <span class="ks-text">${top ? esc(top.text) : esc(t('ai.standby', { name: aiName() }))}</span>
     </button>
-    ${top ? `<span class="ks-actions">${top.actions.slice(0, 2).map(actionChip).join('')}<button class="kitt-chip ghost" data-act="ai-dismiss" data-id="${esc(top.id)}" aria-label="${esc(t('ai.dismiss'))}">${icon('x', { size: 14 })}</button></span>` : ''}
+    ${top ? `<span class="ks-actions">${top.actions.slice(0, 2).map(actionChip).join('')}<button class="pilot-chip ghost" data-act="ai-dismiss" data-id="${esc(top.id)}" aria-label="${esc(t('ai.dismiss'))}">${icon('x', { size: 14 })}</button></span>` : ''}
     <button class="ks-mic" data-act="ai-listen" aria-label="${esc(t('ai.speak'))}">${icon('mic', { size: 18 })}</button>
   </div>`;
 }
@@ -61,29 +62,31 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
   ];
   const entry = openSheet({
     title: aiName(),
-    cls: 'sheet-kitt sheet-tall',
-    body: `<div class="kitt">
-      <div class="kitt-scanner" aria-hidden="true"><span></span></div>
-      <div class="kitt-dash">
-        <div class="kitt-lamps">${lamps()}</div>
-        ${voiceBox()}
-        <div class="kitt-lamps right"><span class="lamp ${canListen() ? 'on' : ''}">MIC</span><span class="lamp" data-lamp="busy">${esc(t('ai.lamp.busy'))}</span><span class="lamp" data-lamp="talk">${esc(t('ai.lamp.talk'))}</span></div>
+    cls: 'sheet-pilot sheet-tall',
+    body: `<div class="pilot">
+      <div class="pilot-dash">
+        <div class="pilot-lamps">${lamps()}</div>
+        <div class="pilot-lcd">
+          <span class="pilot-sweep" aria-hidden="true"></span>
+          ${voiceBox()}
+          <div class="pilot-status" aria-live="polite"></div>
+        </div>
+        <div class="pilot-lamps right"><span class="lamp ${canListen() ? 'on' : ''}">MIC</span><span class="lamp" data-lamp="busy">${esc(t('ai.lamp.busy'))}</span><span class="lamp" data-lamp="talk">${esc(t('ai.lamp.talk'))}</span></div>
       </div>
-      <div class="kitt-status" aria-live="polite"></div>
-      <div class="kitt-log" role="log"></div>
-      <div class="kitt-suggest">${chips.map(([l, p]) => `<button class="kitt-chip" data-k-chip="${p ? esc(t(p)) : ''}">${esc(t(l))}</button>`).join('')}</div>
-      <button class="kitt-mic ${canListen() ? '' : 'hidden'}" type="button" aria-label="${esc(t('ai.speak'))}"><span class="km-ring"></span>${icon('mic', { size: 26 })}<b>${esc(t('ai.talk'))}</b></button>
-      <form class="kitt-input">
+      <div class="pilot-log" role="log"></div>
+      <div class="pilot-suggest">${chips.map(([l, p]) => `<button class="pilot-chip" data-k-chip="${p ? esc(t(p)) : ''}">${esc(t(l))}</button>`).join('')}</div>
+      <button class="pilot-mic ${canListen() ? '' : 'hidden'}" type="button" aria-label="${esc(t('ai.speak'))}"><span class="km-ring"></span>${icon('mic', { size: 26 })}<b>${esc(t('ai.talk'))}</b></button>
+      <form class="pilot-input">
         <input name="q" autocomplete="off" enterkeyhint="send" placeholder="${esc(canListen() ? t('ai.placeholderMic') : t('ai.placeholder'))}" aria-label="${esc(t('ai.placeholder'))}">
-        <button type="submit" class="kitt-send" aria-label="${esc(t('ai.send'))}">${icon('arrow-right', { size: 20 })}</button>
+        <button type="submit" class="pilot-send" aria-label="${esc(t('ai.send'))}">${icon('arrow-right', { size: 20 })}</button>
       </form>
     </div>`,
     onMount(el) {
-      const root = el.querySelector('.kitt');
-      const log = root.querySelector('.kitt-log');
-      const status = root.querySelector('.kitt-status');
+      const root = el.querySelector('.pilot');
+      const log = root.querySelector('.pilot-log');
+      const status = root.querySelector('.pilot-status');
       const input = root.querySelector('input[name=q]');
-      const mic = root.querySelector('.kitt-mic');
+      const mic = root.querySelector('.pilot-mic');
       open = { root, mode: 'idle', listening: false, busy: false };
       const setStatus = (key, extra = '') => {
         status.textContent = key ? t(key) + extra : '';
@@ -115,7 +118,7 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
         setStatus('ai.status.thinking');
         try {
           const r = await talk(text, { onStep: () => setStatus('ai.status.working') });
-          const chipsHtml = [...(r.effects || []).map(effectChip), r.changed ? `<button class="kitt-chip warn" data-k-undo>${esc(t('common.undo'))}</button>` : ''].join('');
+          const chipsHtml = [...(r.effects || []).map(effectChip), r.changed ? `<button class="pilot-chip warn" data-k-undo>${esc(t('common.undo'))}</button>` : ''].join('');
           add('ai', `<p>${esc(r.text)}</p>${chipsHtml ? `<div class="kl-chips">${chipsHtml}</div>` : ''}${r.local && !hasAI() ? `<small class="kl-note">${esc(t('ai.localNote'))}</small>` : ''}`);
           open.busy = false;
           setStatus('');
@@ -148,7 +151,7 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
       }
 
       mic.addEventListener('click', () => (open.listening ? stopListening() : startListening()));
-      root.querySelector('.kitt-input').addEventListener('submit', (e) => {
+      root.querySelector('.pilot-input').addEventListener('submit', (e) => {
         e.preventDefault();
         send(input.value);
       });
@@ -165,7 +168,7 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
         const u = e.target.closest('[data-k-undo]');
         if (u) {
           undoAssistant();
-          u.replaceWith(Object.assign(document.createElement('span'), { className: 'kitt-chip done', textContent: t('ai.undone') }));
+          u.replaceWith(Object.assign(document.createElement('span'), { className: 'pilot-chip done', textContent: t('ai.undone') }));
         }
       });
 
