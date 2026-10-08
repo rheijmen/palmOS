@@ -1,7 +1,7 @@
 // The assistant's face, in the Agendus 2007 style: a glossy LCD with a light that
 // sweeps across while it thinks and a three-column voice box that lights up while
-// it talks (a nod to the talking cars of 1980s TV), indicator lamps, speech bubbles
-// and one big Talk button. Plus the slim proactive strip at the top of the Agenda.
+// it talks (a nod to the talking cars of 1980s TV), speech bubbles and one big
+// Talk button. Plus the slim proactive strip at the top of the Agenda.
 import { state } from '../store.js';
 import { esc } from '../util.js';
 import { t } from '../i18n.js';
@@ -50,10 +50,6 @@ let open = null; // state of the open panel
 
 export function openAssistant({ listenNow = false, prompt = '' } = {}) {
   if (open) return;
-  const lamps = () => `
-    <span class="lamp ${hasAI() ? 'on' : ''}">AI</span>
-    <span class="lamp ${state.settings.aiSpeak ? 'on' : ''}">${esc(t('ai.lamp.voice'))}</span>
-    <span class="lamp ${state.settings.aiProactive ? 'on' : ''}">AUTO</span>`;
   const chips = [
     ['ai.chip.next', 'ai.chip.nextPrompt'],
     ['ai.chip.brief', 'ai.chip.briefPrompt'],
@@ -64,14 +60,10 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
     title: aiName(),
     cls: 'sheet-pilot sheet-tall',
     body: `<div class="pilot">
-      <div class="pilot-dash">
-        <div class="pilot-lamps">${lamps()}</div>
-        <div class="pilot-lcd">
-          <span class="pilot-sweep" aria-hidden="true"></span>
-          ${voiceBox()}
-          <div class="pilot-status" aria-live="polite"></div>
-        </div>
-        <div class="pilot-lamps right"><span class="lamp ${canListen() ? 'on' : ''}">MIC</span><span class="lamp" data-lamp="busy">${esc(t('ai.lamp.busy'))}</span><span class="lamp" data-lamp="talk">${esc(t('ai.lamp.talk'))}</span></div>
+      <div class="pilot-lcd">
+        <span class="pilot-sweep" aria-hidden="true"></span>
+        ${voiceBox()}
+        <div class="pilot-readout"><b>${esc(aiName())}</b><span class="pilot-status" aria-live="polite"></span></div>
       </div>
       <div class="pilot-log" role="log"></div>
       <div class="pilot-suggest">${chips.map(([l, p]) => `<button class="pilot-chip" data-k-chip="${p ? esc(t(p)) : ''}">${esc(t(l))}</button>`).join('')}</div>
@@ -89,10 +81,8 @@ export function openAssistant({ listenNow = false, prompt = '' } = {}) {
       const mic = root.querySelector('.pilot-mic');
       open = { root, mode: 'idle', listening: false, busy: false };
       const setStatus = (key, extra = '') => {
-        status.textContent = key ? t(key) + extra : '';
+        status.textContent = t(key || (hasAI() ? 'ai.status.ready' : 'ai.status.offline')) + extra;
         root.dataset.mode = open.listening ? 'listening' : open.busy ? 'thinking' : isSpeaking() ? 'speaking' : 'idle';
-        root.querySelector('[data-lamp=busy]').classList.toggle('on', open.busy);
-        root.querySelector('[data-lamp=talk]').classList.toggle('on', isSpeaking());
       };
       const stopAnim = animateVoiceBox(root.querySelector('.voice-box'), () => (open?.listening ? 'listening' : isSpeaking() ? 'speaking' : open?.busy ? 'thinking' : 'idle'));
       const offSpeak = onSpeakingChange(() => setStatus(isSpeaking() ? 'ai.status.speaking' : ''));

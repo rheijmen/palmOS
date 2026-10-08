@@ -1,6 +1,6 @@
-// Offline support: cache the app shell, serve it cache-first, refresh in the background.
-// Bump VERSION when files change so phones pick up the new release.
-const VERSION = 'agendus-v4';
+// Offline support: keep a copy of the app shell for when there is no network.
+// Bump VERSION when the list of files changes.
+const VERSION = 'agendus-v5';
 const SHELL = [
   './',
   './index.html',
@@ -50,22 +50,22 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+// Network first, so an update shows up on the next open; the cache is only the
+// offline fallback. Slow networks fall back to the cache after 4 seconds.
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   e.respondWith(
-    caches.match(req, { ignoreSearch: true }).then((hit) => {
-      const net = fetch(req)
-        .then((res) => {
-          if (res.ok) {
-            const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => hit || caches.match('./index.html'));
-      return hit || net;
-    })
+    (async () => {
+      const cache = await caches.open(VERSION);
+      try {
+        const res = await Promise.race([fetch(req, { cache: 'no-cache' }), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 4000))]);
+        if (res.ok) cache.put(req, res.clone());
+        return res;
+      } catch {
+        return (await cache.match(req, { ignoreSearch: true })) || (await cache.match('./index.html')) || Response.error();
+      }
+    })()
   );
 });
 

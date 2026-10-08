@@ -1,9 +1,9 @@
-/* Pilot, the assistant. Inspired by the talking cars of 1980s TV (a light that
-   sweeps while it thinks, a three-column voice box that lights up while it talks,
-   indicator lamps), drawn in the style of each look:
-   - Agendus 2007: glossy aqua LCD, jelly lamps, iPhone OS 1 speech bubbles
+/* Pilot, the assistant. A nod to the talking cars of 1980s TV (a light that sweeps
+   while it thinks, a three-column voice box that lights up while it talks), drawn in
+   the style of each look, in warm orange rather than warning red:
+   - Agendus 2007: glossy silver display with orange segments, iPhone OS 1 bubbles
    - Classic Palm: green-grey Palm LCD with dark segments
-   - Modern: flat, in the accent colour */
+   - Modern: flat */
 
 :root {
   --pl-bg: var(--surface);
@@ -11,14 +11,10 @@
   --pl-lcd-line: var(--line);
   --pl-lcd-ink: var(--text);
   --pl-lcd-shadow: none;
-  --pl-seg-off: color-mix(in srgb, var(--accent) 14%, transparent);
-  --pl-seg-on: var(--accent);
+  --pl-seg-off: rgba(240, 138, 0, 0.14);
+  --pl-seg-on: #f08a00;
   --pl-seg-glow: none;
-  --pl-sweep: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 35%, transparent), transparent);
-  --pl-lamp-off: var(--surface-2);
-  --pl-lamp-off-ink: var(--muted);
-  --pl-lamp-on: var(--accent);
-  --pl-lamp-on-ink: var(--accent-ink);
+  --pl-sweep: linear-gradient(90deg, transparent, rgba(240, 138, 0, 0.25), transparent);
   --pl-me: var(--accent);
   --pl-me-ink: var(--accent-ink);
   --pl-ai: var(--bg);
@@ -27,24 +23,19 @@
   --pl-orb: var(--accent);
   --pl-orb-ink: var(--accent-ink);
   --pl-bar: var(--bg);
-  --pl-font-lcd: var(--font);
 }
 
 /* ------------------------------------------------------------------ Agendus 2007 */
 [data-skin='gloss'] {
   --pl-bg: linear-gradient(#eef1f6, #d9dfe8);
-  --pl-lcd: linear-gradient(#f2f8ff 0%, #d6e6f8 48%, #c3d8f1 52%, #d9e8f8 100%);
-  --pl-lcd-line: #8ea3bf;
-  --pl-lcd-ink: #22406b;
-  --pl-lcd-shadow: inset 0 2px 6px rgba(20, 50, 100, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.8), 0 1px 0 rgba(255, 255, 255, 0.9);
-  --pl-seg-off: rgba(40, 90, 160, 0.13);
-  --pl-seg-on: linear-gradient(#7fc0ff, #2f7fe0 50%, #1d62c8 51%, #2a74d8);
-  --pl-seg-glow: 0 0 6px rgba(60, 150, 255, 0.65);
-  --pl-sweep: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95) 45%, rgba(120, 190, 255, 0.9) 55%, rgba(255, 255, 255, 0));
-  --pl-lamp-off: linear-gradient(#fafbfc, #d3d8e0);
-  --pl-lamp-off-ink: #8590a2;
-  --pl-lamp-on: linear-gradient(#b4ef8e 0%, #6fcf45 48%, #4cb526 52%, #66c93c 100%);
-  --pl-lamp-on-ink: #fff;
+  --pl-lcd: linear-gradient(#ffffff 0%, #f4f6f9 48%, #e5e9ef 52%, #eef1f5 100%);
+  --pl-lcd-line: #a2afc2;
+  --pl-lcd-ink: #33445f;
+  --pl-lcd-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 3px rgba(0, 0, 0, 0.12);
+  --pl-seg-off: rgba(240, 130, 0, 0.13);
+  --pl-seg-on: linear-gradient(#ffd27a 0%, #ffa52e 48%, #f08200 52%, #ff9a26 100%);
+  --pl-seg-glow: 0 0 6px rgba(255, 150, 30, 0.55);
+  --pl-sweep: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95) 45%, rgba(255, 190, 90, 0.6) 55%, rgba(255, 255, 255, 0));
   --pl-me: linear-gradient(#dff7c4, #b3e68a);
   --pl-me-ink: #24391a;
   --pl-ai: linear-gradient(#ffffff, #e6ebf2);
@@ -53,20 +44,17 @@
   --pl-orb: radial-gradient(circle at 50% 115%, #8fdcff 0%, #3c8ef0 38%, #1c56c0 70%, #133f92 100%);
   --pl-orb-ink: #fff;
   --pl-bar: linear-gradient(#e3e8ef, #c9d1dc);
-  --pl-font-lcd: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   [data-skin='gloss']:not([data-theme='light']) {
     --pl-bg: linear-gradient(#1b2232, #121826);
-    --pl-lcd: linear-gradient(#1f3150 0%, #15233c 48%, #0f1b30 52%, #142340 100%);
+    --pl-lcd: linear-gradient(#323a4f 0%, #252c3f 48%, #1b2131 52%, #222a3c 100%);
     --pl-lcd-line: #070b13;
-    --pl-lcd-ink: #a9cbff;
-    --pl-lcd-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.06);
-    --pl-seg-off: rgba(110, 170, 255, 0.12);
-    --pl-seg-glow: 0 0 8px rgba(80, 160, 255, 0.8);
-    --pl-sweep: linear-gradient(90deg, rgba(120, 190, 255, 0), rgba(160, 210, 255, 0.55) 50%, rgba(120, 190, 255, 0));
-    --pl-lamp-off: linear-gradient(#3a4558, #262f40);
-    --pl-lamp-off-ink: #7a879e;
+    --pl-lcd-ink: #ffd9a0;
+    --pl-lcd-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.4);
+    --pl-seg-off: rgba(255, 160, 40, 0.12);
+    --pl-seg-glow: 0 0 8px rgba(255, 160, 40, 0.75);
+    --pl-sweep: linear-gradient(90deg, rgba(255, 180, 80, 0), rgba(255, 200, 120, 0.35) 50%, rgba(255, 180, 80, 0));
     --pl-me: linear-gradient(#3f6b2c, #2d5220);
     --pl-me-ink: #e8f7dc;
     --pl-ai: linear-gradient(#2b3548, #212a3b);
@@ -77,15 +65,13 @@
 }
 [data-skin='gloss'][data-theme='dark'] {
   --pl-bg: linear-gradient(#1b2232, #121826);
-  --pl-lcd: linear-gradient(#1f3150 0%, #15233c 48%, #0f1b30 52%, #142340 100%);
+  --pl-lcd: linear-gradient(#323a4f 0%, #252c3f 48%, #1b2131 52%, #222a3c 100%);
   --pl-lcd-line: #070b13;
-  --pl-lcd-ink: #a9cbff;
-  --pl-lcd-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.06);
-  --pl-seg-off: rgba(110, 170, 255, 0.12);
-  --pl-seg-glow: 0 0 8px rgba(80, 160, 255, 0.8);
-  --pl-sweep: linear-gradient(90deg, rgba(120, 190, 255, 0), rgba(160, 210, 255, 0.55) 50%, rgba(120, 190, 255, 0));
-  --pl-lamp-off: linear-gradient(#3a4558, #262f40);
-  --pl-lamp-off-ink: #7a879e;
+  --pl-lcd-ink: #ffd9a0;
+  --pl-lcd-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --pl-seg-off: rgba(255, 160, 40, 0.12);
+  --pl-seg-glow: 0 0 8px rgba(255, 160, 40, 0.75);
+  --pl-sweep: linear-gradient(90deg, rgba(255, 180, 80, 0), rgba(255, 200, 120, 0.35) 50%, rgba(255, 180, 80, 0));
   --pl-me: linear-gradient(#3f6b2c, #2d5220);
   --pl-me-ink: #e8f7dc;
   --pl-ai: linear-gradient(#2b3548, #212a3b);
@@ -104,10 +90,6 @@
   --pl-seg-off: rgba(29, 38, 20, 0.12);
   --pl-seg-on: #1d2614;
   --pl-sweep: linear-gradient(90deg, rgba(29, 38, 20, 0), rgba(29, 38, 20, 0.35), rgba(29, 38, 20, 0));
-  --pl-lamp-off: #fff;
-  --pl-lamp-off-ink: #888;
-  --pl-lamp-on: #000;
-  --pl-lamp-on-ink: #fff;
   --pl-me: #003a8c;
   --pl-me-ink: #fff;
   --pl-ai: #fff;
@@ -248,34 +230,14 @@
 .pilot { display: flex; flex-direction: column; flex: 1; min-height: 100%; background: var(--pl-bg); }
 [data-skin='gloss'] .pilot { background: var(--g-stripes); }
 
-.pilot-dash { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 14px 12px 8px; }
-.pilot-lamps { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
-.pilot-lamps.right { align-items: flex-end; }
-.lamp {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 3px 8px;
-  min-width: 46px;
-  text-align: center;
-  border-radius: 999px;
-  background: var(--pl-lamp-off);
-  color: var(--pl-lamp-off-ink);
-  border: 1px solid var(--pl-lcd-line);
-}
-.lamp.on { background: var(--pl-lamp-on); color: var(--pl-lamp-on-ink); }
-[data-skin='gloss'] .lamp { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 1px 1px rgba(0, 0, 0, 0.12); border-color: #8f9aab; }
-[data-skin='gloss'] .lamp.on { border-color: #3b8a1d; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 0 6px rgba(100, 210, 60, 0.55); }
-[data-skin='palm'] .lamp { border-radius: 0; }
-
 /* The LCD: voice box and status line inside one glossy display */
 .pilot-lcd {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 10px 8px;
+  gap: 18px;
+  margin: 12px 12px 4px;
+  padding: 12px 18px;
   border-radius: 14px;
   background: var(--pl-lcd);
   border: 1px solid var(--pl-lcd-line);
@@ -283,6 +245,9 @@
   overflow: hidden;
   min-width: 0;
 }
+.pilot-readout { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pilot-readout b { font-size: 17px; color: var(--pl-lcd-ink); }
+[data-skin='gloss'] .pilot-readout b { text-shadow: var(--g-emboss); }
 [data-skin='palm'] .pilot-lcd { border-radius: 0; border-width: 2px; }
 /* Glass reflection on the top half (2007 gloss only). */
 [data-skin='gloss'] .pilot-lcd::after {
@@ -314,10 +279,10 @@
 .pilot[data-mode='idle'] .pilot-sweep { opacity: 0.35; }
 @keyframes pl-sweep { from { transform: translateX(-30%); } to { transform: translateX(260%); } }
 
-.voice-box { position: relative; display: flex; align-items: center; gap: 7px; z-index: 1; }
-.vb-col { display: flex; flex-direction: column; gap: 3px; }
-.vb-col i { display: block; width: 24px; height: 6px; border-radius: 2px; background: var(--pl-seg-off); }
-.vb-col:nth-child(2) i { width: 32px; }
+.voice-box { position: relative; display: flex; align-items: center; gap: 5px; z-index: 1; flex: none; }
+.vb-col { display: flex; flex-direction: column; gap: 2px; }
+.vb-col i { display: block; width: 18px; height: 4px; border-radius: 2px; background: var(--pl-seg-off); }
+.vb-col:nth-child(2) i { width: 24px; }
 .vb-col i.on { background: var(--pl-seg-on); box-shadow: var(--pl-seg-glow); }
 [data-skin='palm'] .vb-col i { border-radius: 0; }
 
@@ -325,11 +290,11 @@
   position: relative;
   z-index: 1;
   min-height: 16px;
-  font-family: var(--pl-font-lcd);
+  font-family: var(--font);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--pl-lcd-ink);
-  text-align: center;
+  opacity: 0.8;
 }
 [data-skin='gloss'] .pilot-status { text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7); }
 @media (prefers-color-scheme: dark) {
@@ -354,7 +319,7 @@
 [data-skin='palm'] .kl.me, [data-skin='palm'] .kl.ai { border-radius: 0; }
 .kl.ai.err p { color: var(--danger); }
 .kl-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.kl-insight { margin-top: 8px; padding: 7px 10px; border-left: 3px solid var(--accent-2); background: color-mix(in srgb, var(--accent-soft) 70%, transparent); border-radius: 0 8px 8px 0; font-size: 15px; }
+.kl-insight { margin-top: 8px; padding: 7px 10px; border-left: 3px solid #f08a00; background: color-mix(in srgb, var(--accent-soft) 70%, transparent); border-radius: 0 8px 8px 0; font-size: 15px; }
 .kl-note { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; }
 
 .pilot-suggest { display: flex; gap: 6px; overflow-x: auto; padding: 4px 12px 8px; scrollbar-width: none; }

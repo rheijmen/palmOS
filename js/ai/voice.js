@@ -131,7 +131,7 @@ export function stopSpeaking() {
 // centre outwards with the rhythm of speech (or a gentle idle shimmer while listening).
 export function voiceBox() {
   const col = (n) => `<span class="vb-col" style="--n:${n}">${'<i></i>'.repeat(n)}</span>`;
-  return `<div class="voice-box" aria-hidden="true">${col(9)}${col(13)}${col(9)}</div>`;
+  return `<div class="voice-box" aria-hidden="true">${col(7)}${col(11)}${col(7)}</div>`;
 }
 
 export function animateVoiceBox(el, getMode) {

@@ -54,7 +54,7 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
 - Talk to your agenda: tap the little display in the title bar (or press `k`), tap **Talk** and speak, or type
 - It reads and changes your agenda for you: "move the dentist to Friday at 3", "what does tomorrow look like?", "remind me to call Kristine after lunch", "text William I'm running late"
 - It speaks up by itself: a strip on today's Agenda points out what's next, clashes, days without a break, overdue tasks (with one-tap "move to today"), birthdays and early starts. Opening the assistant reads the news aloud; reminders are spoken too
-- Interface: in the Agendus 2007 style, with a nod to the talking cars of 1980s TV. A glossy LCD shows a light that sweeps while it thinks and a three-column voice box that lights up while it talks; jelly lamps show what's on, and the conversation runs in speech bubbles. Classic Palm gets a green Palm LCD, Modern stays flat
+- Interface: in the Agendus 2007 style, with a nod to the talking cars of 1980s TV. A glossy display shows a light that sweeps while it thinks and an orange three-column visualizer that lights up while it talks; the conversation runs in speech bubbles. Classic Palm gets a green Palm LCD, Modern stays flat
 - Every change it makes can be undone with one tap
 - Works without AI too: offline it understands "what's next", "today", "tomorrow" and "remind me to..."
 
