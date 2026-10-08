@@ -2,7 +2,7 @@
 
 A mobile-first web version of **Agendus**, the classic Palm OS organizer by Iambic. Appointments, tasks, contacts and memos in one place, with the Agenda screen that made Agendus famous: everything you need for today on one page.
 
-It's a Progressive Web App. Open it in a browser, add it to your home screen, and it works offline. No account, no server: your data stays on your device.
+It's a Progressive Web App. Open it in a browser, add it to your home screen, and it works offline. No account needed: your data stays on your device. Want the same agenda on your phone and laptop? Run the small sync server in `server/` on your own VPS.
 
 ## Features
 
@@ -63,6 +63,13 @@ To let it understand everything, add a Claude API key in **Preferences > Assista
 - Default model is Claude Opus 5.5 at low effort, so answers are quick. Switch to Sonnet 5.5 or Haiku 5.5 (much cheaper) in Preferences. If Claude declines a request, a fallback model takes over automatically.
 - Voice uses the browser's built-in speech recognition and voices. On iPhone, the microphone button may be missing in the home-screen app; the keyboard's dictation microphone works everywhere.
 
+**Sync between devices (optional)**
+- Sign in under *Preferences > Sync* to keep phones, tablets and computers in step. Changes from other devices appear within seconds while the app is open
+- Runs on your own server (PocketBase, one container), so your data stays with you. You create the accounts; each person only sees their own agenda
+- Works offline as before: changes wait and go up when you're back online. When the same item was edited on two devices, the latest edit wins
+- Your look and language stay per device; preferences such as week start and day hours follow you
+- Setup guide: [server/README.md](server/README.md)
+
 **Everything else**
 - Global search across appointments, tasks, contacts and memos
 - Category filter on every screen
@@ -95,7 +102,7 @@ After deploying an update, bump `VERSION` in `sw.js` so installed apps pick up t
 
 ## Good to know
 
-- **Where is my data?** In your browser's local storage on that device. Use *Preferences > Back up* now and then, and *Restore* to move to another device. Sync between devices would need a backend, which this version deliberately doesn't have.
+- **Where is my data?** In your browser's local storage on that device, and on your sync server if you signed in. Without sync, use *Preferences > Back up* now and then, and *Restore* to move to another device.
 - **Alarms** ring while the app is open or running in the background. Browsers don't let a closed web app wake up at an exact time, so an alarm that was missed while the app was fully closed shows up the next time you open it (up to 6 hours late).
 
 ## Tests
@@ -105,11 +112,19 @@ npm install
 npm test
 ```
 
-Runs two checks in a headless phone-sized browser:
+Runs these checks in a headless phone-sized browser:
 
 - `tests/e2e.mjs`: creating and editing appointments (including a single occurrence of a repeating one), undo, tasks and repeating tasks, contacts and birthdays, search, the back button, date navigation, memo autosave, `.ics`/`.vcf` round trips, the recurrence rules, and a no-horizontal-scroll check on a 360px screen.
 - `tests/gestures.mjs`: real touch input for long-press dragging, resizing, create-by-drag, month drag, repeating-appointment moves and task swipes, plus mouse dragging in the week view.
 - `tests/assistant.mjs`: offline commands, the API key settings, and the full Claude tool loop against a mocked API (request headers, fallback, tool calls, undo, error handling). No real key needed and nothing is billed.
+
+The sync check needs the PocketBase program ([download](https://pocketbase.io/docs/)) and starts its own throwaway server:
+
+```bash
+POCKETBASE=/path/to/pocketbase npm run test:sync
+```
+
+- `tests/sync.mjs`: two devices on one account: first upload and download, live updates, edits, deletes, offline changes, conflicts, shared versus per-device preferences, and that switching accounts never mixes data.
 
 ## Project structure
 
@@ -128,13 +143,16 @@ js/ai/assistant.js    Conversation with Claude, tools, offline commands
 js/ai/insights.js     Proactive tips and the spoken briefing
 js/ai/panel.js        The dashboard and the Agenda strip
 js/ai/voice.js        Speech in/out and the voice box
-js/vendor/            Anthropic SDK, bundled for the browser
+js/sync.js            Sync with your PocketBase server
+js/config.js          Default sync server address
+js/vendor/            Anthropic and PocketBase SDKs, bundled for the browser
 css/assistant.css     How Pilot looks in each style
 js/interop.js         .ics and .vcf import/export
 js/i18n.js            Translation and date formatting
 js/strings.js         English and Dutch strings
 js/views/*.js         Agenda, calendar views, tasks, contacts, memos, preferences
 sw.js                 Offline cache
+server/               Sync server: Docker setup, database rules, setup guide
 ```
 
 Agendus was a product of Iambic Inc. This project is an independent tribute and is not affiliated with Iambic.

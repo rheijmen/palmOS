@@ -7,6 +7,46 @@ import { catName } from '../query.js';
 import { fmtAlarm } from '../i18n.js';
 import { hasAI, MODELS } from '../ai/assistant.js';
 import { canListen, canSpeak, voicesForLanguage } from '../ai/voice.js';
+import { signedInAs, syncStatus, getServerUrl } from '../sync.js';
+
+function syncLine(st) {
+  if (st.state === 'syncing') return t('sync.status.syncing');
+  if (st.state === 'offline') return t('sync.status.offline');
+  if (st.state === 'error') return t('sync.status.error', { code: st.error });
+  const last = state.sync.lastSync;
+  if (!last) return t('sync.status.never');
+  const mins = Math.round((Date.now() - new Date(last).getTime()) / 60000);
+  return mins < 1 ? t('sync.status.justNow') : t('sync.status.ago', { n: mins });
+}
+
+function syncCard() {
+  const who = signedInAs();
+  const st = syncStatus();
+  if (who) {
+    return `
+        <h3 class="section-head"><span>${esc(t('sync.title'))}</span></h3>
+        <div class="card">
+          <div class="pref"><span class="pref-label">${esc(t('sync.signedInAs'))}<small>${esc(who)}</small></span><span class="sync-state" data-state="${esc(st.state)}">${esc(syncLine(st))}</span></div>
+          <div class="btn-grid">
+            <button class="btn" data-act="sync-now">${icon('rotate-ccw', { size: 16 })} ${esc(t('sync.now'))}</button>
+            <button class="btn" data-act="sync-signout">${esc(t('sync.signOut'))}</button>
+          </div>
+          <p class="muted small">${esc(t('sync.howItWorks'))}</p>
+        </div>`;
+  }
+  return `
+        <h3 class="section-head"><span>${esc(t('sync.title'))}</span></h3>
+        <div class="card">
+          <p class="muted small">${esc(st.error === 'expired' ? t('sync.expired') : t('sync.intro'))}</p>
+          <div class="form sync-form">
+            <label class="field"><span class="field-label">${esc(t('sync.server'))}</span><input id="sync-url" type="url" inputmode="url" autocomplete="url" value="${esc(getServerUrl())}" placeholder="https://sync.example.nl"></label>
+            <label class="field"><span class="field-label">${esc(t('sync.email'))}</span><input id="sync-email" type="email" inputmode="email" autocomplete="username"></label>
+            <label class="field"><span class="field-label">${esc(t('sync.password'))}</span><input id="sync-pass" type="password" autocomplete="current-password"></label>
+            <button class="btn btn-primary" data-act="sync-signin">${esc(t('sync.signIn'))}</button>
+          </div>
+          <p class="muted small">${esc(t('sync.accountsNote'))}</p>
+        </div>`;
+}
 
 const textInput = (key, value, placeholder = '') =>
   `<input class="pref-input" data-change="setting-text" data-key="${key}" value="${esc(value || '')}" placeholder="${esc(placeholder)}" autocomplete="off">`;
@@ -57,6 +97,8 @@ export const settingsView = {
           ${pref(t('settings.weekStart'), sel('weekStart', [[1, t('settings.monday')], [0, t('settings.sunday')], [6, t('settings.saturday')]], s.weekStart))}
           ${pref(t('settings.timeFormat'), sel('hour12', [['auto', t('settings.auto')], [false, '13:00'], [true, '1:00 PM']], s.hour12))}
         </div>
+
+        ${syncCard()}
 
         <h3 class="section-head"><span>${esc(t('settings.calendar'))}</span></h3>
         <div class="card">

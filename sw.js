@@ -1,6 +1,6 @@
 // Offline support: keep a copy of the app shell for when there is no network.
 // Bump VERSION when the list of files changes.
-const VERSION = 'agendus-v5';
+const VERSION = 'agendus-v6';
 const SHELL = [
   './',
   './index.html',
@@ -12,6 +12,8 @@ const SHELL = [
   './assets/icon-192.png',
   './assets/icon-512.png',
   './js/app.js',
+  './js/config.js',
+  './js/sync.js',
   './js/actions.js',
   './js/components.js',
   './js/editors.js',
@@ -38,6 +40,7 @@ const SHELL = [
   './js/ai/panel.js',
   './js/ai/voice.js',
   './js/vendor/anthropic-sdk.js',
+  './js/vendor/pocketbase.js',
 ];
 
 self.addEventListener('install', (e) => {

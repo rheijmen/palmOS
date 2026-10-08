@@ -20,6 +20,7 @@ import { openAssistant } from './ai/panel.js';
 import { dismissInsight, moveOverdue } from './ai/insights.js';
 import { setApiKey } from './ai/assistant.js';
 import { speak } from './ai/voice.js';
+import { initSync, signIn, signOut, syncNow, onSyncStatus } from './sync.js';
 import { exportICS, importICS, exportVCF, importVCF } from './interop.js';
 
 const VIEWS = { agenda: agendaView, day: dayView, week: weekView, month: monthView, year: yearView, list: listView, tasks: tasksView, contacts: contactsView, memos: memosView, settings: settingsView };
@@ -229,6 +230,7 @@ function showWelcome() {
       <div class="dialog-actions">
         <button class="btn btn-primary" data-w="demo">${esc(t('welcome.demo'))}</button>
         <button class="btn" data-w="empty">${esc(t('welcome.empty'))}</button>
+        <button class="btn btn-ghost" data-w="account">${icon('users', { size: 16 })} ${esc(t('sync.haveAccount'))}</button>
       </div>`,
     onMount(el) {
       el.addEventListener('click', (e) => {
@@ -237,6 +239,7 @@ function showWelcome() {
         if (b.dataset.w === 'demo') seedDemo(t);
         else markWelcomed();
         closeSheet();
+        if (b.dataset.w === 'account') go('settings');
       });
     },
     onClose() {
@@ -303,6 +306,28 @@ function registerActions() {
     render();
   });
   on('ai-test-voice', () => speak(t('ai.voiceTest', { name: state.settings.aiName || 'Pilot' }), { force: true }));
+
+  on('sync-signin', async (el) => {
+    const url = document.getElementById('sync-url').value;
+    const email = document.getElementById('sync-email').value;
+    const pass = document.getElementById('sync-pass').value;
+    if (!url.trim() || !email.trim() || !pass) return toast(t('sync.fillIn'));
+    el.disabled = true;
+    el.textContent = t('sync.signingIn');
+    try {
+      await signIn(url, email, pass);
+      toast(t('sync.signedIn'));
+    } catch (e) {
+      toast(e?.status === 400 ? t('sync.wrongLogin') : e?.status ? t('sync.serverError', { code: e.status }) : t('sync.unreachable'));
+    }
+    render();
+  });
+  on('sync-now', () => syncNow());
+  on('sync-signout', async () => {
+    if (!(await confirmDialog(t('sync.signOut'), t('sync.signOutConfirm'), t('sync.signOut'), false))) return;
+    signOut();
+    render();
+  });
   on('list-more', () => {
     listMore();
     render();
@@ -513,6 +538,12 @@ function boot() {
 
   if (!state.welcomed) setTimeout(showWelcome, 300);
   startReminders();
+  // Sync: a dot on the Preferences button shows the state; Preferences shows details.
+  onSyncStatus((st) => {
+    document.getElementById('btn-settings').dataset.sync = st.state;
+    if (route.view === 'settings' && !document.activeElement?.closest?.('input')) render();
+  });
+  initSync();
   // Speech voices load asynchronously; refresh the voice list in Preferences.
   if ('speechSynthesis' in window) speechSynthesis.addEventListener?.('voiceschanged', () => route.view === 'settings' && render());
 

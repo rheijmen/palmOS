@@ -25,3 +25,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ## Anthropic TypeScript SDK
 
 `js/vendor/anthropic-sdk.js` is `@anthropic-ai/sdk` 0.132.1, bundled for the browser. MIT License, Copyright 2023 Anthropic, PBC. Full text in `js/vendor/anthropic-sdk.LICENSE.txt`.
+
+## PocketBase JavaScript SDK
+
+`js/vendor/pocketbase.js` is the `pocketbase` JS SDK 0.28.1, bundled for the browser. MIT License, Copyright (c) 2022 - present, Gani Georgiev. Full text in `js/vendor/pocketbase.LICENSE.txt`.
+
+The sync server in `server/` downloads [PocketBase](https://pocketbase.io) itself (MIT License, same author) when the Docker image is built; it is not included in this repository.

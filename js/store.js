@@ -50,6 +50,8 @@ function empty() {
     settings: { ...DEFAULT_SETTINGS },
     alarms: { fired: {}, snoozed: [] },
     ai: { dismissed: null },
+    // Per-device sync bookkeeping (see sync.js); never in backups or undo.
+    sync: { cursor: '', known: {}, lastSync: null, uid: null },
   };
 }
 
@@ -75,6 +77,7 @@ function load() {
       settings: { ...base.settings, ...(data.settings || {}) },
       alarms: { ...base.alarms, ...(data.alarms || {}) },
       ai: { ...base.ai, ...(data.ai || {}) },
+      sync: { ...base.sync, ...(data.sync || {}) },
     };
   } catch {
     return empty();
@@ -115,7 +118,7 @@ export function commit(mutator, { undoable = false, silent = false } = {}) {
 }
 
 function stripAlarms(s) {
-  const { alarms, ...rest } = s;
+  const { alarms, sync, ...rest } = s;
   return rest;
 }
 
@@ -172,7 +175,7 @@ export function category(id) {
 }
 
 export function exportJSON() {
-  const { alarms, ...data } = state;
+  const { alarms, sync, ...data } = state;
   return JSON.stringify({ app: 'agendus-web', exportedAt: new Date().toISOString(), ...data }, null, 2);
 }
 

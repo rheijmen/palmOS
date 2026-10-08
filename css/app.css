@@ -1097,3 +1097,27 @@ html[data-nav='back']::view-transition-new(main-view) { animation-name: vt-in-ba
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ------------------------------------------------------------------ sync */
+.sync-form { padding: 8px 0; gap: 10px; }
+.sync-form .btn { align-self: flex-start; }
+.sync-state { font-size: 13px; font-weight: 600; color: var(--ok); text-align: right; }
+.sync-state[data-state='syncing'] { color: var(--accent-2); }
+.sync-state[data-state='offline'], .sync-state[data-state='error'] { color: var(--warn); }
+/* Small dot on the Preferences button while syncing or when sync needs attention. */
+#btn-settings { position: relative; }
+#btn-settings[data-sync='syncing']::after,
+#btn-settings[data-sync='error']::after,
+#btn-settings[data-sync='signedout']::after {
+  content: '';
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 2px var(--bg);
+}
+#btn-settings[data-sync='error']::after,
+#btn-settings[data-sync='signedout']::after { background: #f08a00; }
