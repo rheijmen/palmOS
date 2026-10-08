@@ -1,6 +1,6 @@
 // Offline support: cache the app shell, serve it cache-first, refresh in the background.
 // Bump VERSION when files change so phones pick up the new release.
-const VERSION = 'agendus-v3';
+const VERSION = 'agendus-v4';
 const SHELL = [
   './',
   './index.html',
