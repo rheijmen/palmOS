@@ -42,12 +42,20 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
 **Memos**
 - Memo Pad notes, first line is the title, saved automatically
 
+**Touch controls**
+- Day and week view: long-press an appointment and drag it to another time (or another day in the week view); drag its bottom edge to make it longer or shorter; long-press an empty spot and drag to create an appointment for exactly that time range
+- Month view: long-press an appointment and drag it to another day
+- To Do (and the tasks on the Agenda): swipe right to complete, swipe left to delete, with undo
+- Repeating appointments ask whether to move only this one, this and future ones, or all
+- With a mouse, everything drags straight away (no long-press needed)
+- Haptic feedback on Android, pages slide when you change dates
+
 **Everything else**
 - Global search across appointments, tasks, contacts and memos
 - Category filter on every screen
 - Undo after deleting or completing
 - English and Dutch (follows your device language, or set it in Preferences)
-- Themes: Light, Dark, Automatic, and **Classic Palm**
+- Looks: **Agendus 2007** (default, glossy 2007-era style, light and night versions), Modern (flat), and **Classic Palm**
 - Import/export: `.ics` (Google, Apple, Outlook calendars), `.vcf` (contacts), and full JSON backups
 - Keyboard shortcuts on desktop: `a` agenda, `d` `w` `m` `y` `l` views, `t` today, arrows to move, `n` new, `/` search
 
@@ -84,19 +92,24 @@ npm install
 npm test
 ```
 
-Runs an end-to-end check in a headless phone-sized browser: creating and editing appointments (including a single occurrence of a repeating one), undo, tasks and repeating tasks, contacts and birthdays, search, the back button, date navigation, memo autosave, `.ics`/`.vcf` round trips, the recurrence rules, and a no-horizontal-scroll check on a 360px screen.
+Runs two checks in a headless phone-sized browser:
+
+- `tests/e2e.mjs`: creating and editing appointments (including a single occurrence of a repeating one), undo, tasks and repeating tasks, contacts and birthdays, search, the back button, date navigation, memo autosave, `.ics`/`.vcf` round trips, the recurrence rules, and a no-horizontal-scroll check on a 360px screen.
+- `tests/gestures.mjs`: real touch input for long-press dragging, resizing, create-by-drag, month drag, repeating-appointment moves and task swipes, plus mouse dragging in the week view.
 
 ## Project structure
 
 ```
 index.html            App shell
-css/app.css           All styles and themes
+css/app.css           Layout, themes and gesture styles
+css/skin-2007.css     The "Agendus 2007" look
 js/app.js             Routing, title bar, toolbar, global actions
 js/store.js           Data, persistence, undo, sample data
 js/query.js           Occurrences, filters, search
 js/recur.js           Repeat rules
 js/editors.js         Detail and edit sheets, pickers, follow-ups
 js/reminders.js       Alarms, snooze, notifications
+js/gestures.js        Drag, resize and swipe
 js/interop.js         .ics and .vcf import/export
 js/i18n.js            Translation and date formatting
 js/strings.js         English and Dutch strings

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Agendus Web</title>
     <meta name="description" content="A mobile-first web version of Agendus, the classic Palm OS organizer: agenda, calendar, tasks, contacts and memos in one place.">
-    <meta name="theme-color" content="#1b4fa8">
+    <meta name="theme-color" content="#2a62c0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,13 +14,17 @@
     <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/skin-2007.css">
     <script>
       // Apply the saved theme before first paint to avoid a flash.
       try {
         var s = JSON.parse(localStorage.getItem('agendus.v1') || '{}').settings || {};
-        document.documentElement.dataset.theme = s.theme || 'auto';
+        var th = s.theme || 'auto';
+        document.documentElement.dataset.theme = th;
+        document.documentElement.dataset.skin = th === 'classic' ? 'palm' : th === 'modern' ? 'flat' : 'gloss';
       } catch (e) {
         document.documentElement.dataset.theme = 'auto';
+        document.documentElement.dataset.skin = 'gloss';
       }
     </script>
   </head>

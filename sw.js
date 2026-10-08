@@ -1,11 +1,12 @@
 // Offline support: cache the app shell, serve it cache-first, refresh in the background.
 // Bump VERSION when files change so phones pick up the new release.
-const VERSION = 'agendus-v1';
+const VERSION = 'agendus-v2';
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './css/app.css',
+  './css/skin-2007.css',
   './assets/icon.svg',
   './assets/icon-192.png',
   './assets/icon-512.png',
@@ -13,6 +14,7 @@ const SHELL = [
   './js/actions.js',
   './js/components.js',
   './js/editors.js',
+  './js/gestures.js',
   './js/i18n.js',
   './js/icons.js',
   './js/icons-data.js',

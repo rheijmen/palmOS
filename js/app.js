@@ -15,6 +15,7 @@ import { memosView, setMemoQuery, memoTitle } from './views/memos.js';
 import { settingsView } from './views/settings.js';
 import { openEventDetail, openEventEditor, openTaskEditor, openContactDetail, openContactEditor, openMemoEditor, openNewChooser, toggleTask, openDatePicker } from './editors.js';
 import { startReminders, requestNotifications } from './reminders.js';
+import { initGestures, gestureBusy } from './gestures.js';
 import { exportICS, importICS, exportVCF, importVCF } from './interop.js';
 
 const VIEWS = { agenda: agendaView, day: dayView, week: weekView, month: monthView, year: yearView, list: listView, tasks: tasksView, contacts: contactsView, memos: memosView, settings: settingsView };
@@ -48,10 +49,15 @@ export function go(view, date = route.date) {
 
 // ---------------------------------------------------------------- theme
 
+// Theme = colours (light/dark), skin = the look: 'gloss' (2007), 'flat' (modern), 'palm' (classic).
+export const skinFor = (theme) => (theme === 'classic' ? 'palm' : theme === 'modern' ? 'flat' : 'gloss');
+
 function applyTheme() {
-  document.documentElement.dataset.theme = state.settings.theme;
-  const dark = state.settings.theme === 'dark' || (state.settings.theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.querySelector('meta[name=theme-color]').content = state.settings.theme === 'classic' ? '#003a8c' : dark ? '#10182a' : '#1b4fa8';
+  const theme = state.settings.theme;
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset.skin = skinFor(theme);
+  const dark = theme === 'dark' || ((theme === 'auto' || theme === 'modern') && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name=theme-color]').content = theme === 'classic' ? '#003a8c' : dark ? '#121a2b' : skinFor(theme) === 'gloss' ? '#2a62c0' : '#1b4fa8';
 }
 
 // ---------------------------------------------------------------- render
@@ -147,9 +153,11 @@ function scrollGrid(grid) {
 
 // ---------------------------------------------------------------- navigation
 
+let navDir = 0;
 function step(n) {
   const v = VIEWS[route.view];
   if (!v.step) return;
+  navDir = n;
   go(route.view, v.step(route.date, n));
 }
 
@@ -209,6 +217,7 @@ function showWelcome() {
         <li>${icon('users', { size: 16 })} ${esc(t('welcome.f3'))}</li>
         <li>${icon('bell', { size: 16 })} ${esc(t('welcome.f4'))}</li>
         <li>${icon('lock', { size: 16 })} ${esc(t('welcome.f5'))}</li>
+        <li>${icon('smartphone', { size: 16 })} ${esc(t('welcome.f6'))}</li>
       </ul>
       <div class="dialog-actions">
         <button class="btn btn-primary" data-w="demo">${esc(t('welcome.demo'))}</button>
@@ -395,13 +404,13 @@ function initSwipe() {
   const main = document.getElementById('main');
   let x0 = null, y0 = 0, tm = 0;
   main.addEventListener('touchstart', (e) => {
-    if (e.touches.length !== 1 || e.target.closest('input,textarea,select,.filters,.chips')) return (x0 = null);
+    if (e.touches.length !== 1 || e.target.closest('input,textarea,select,.filters,.chips,.task,.blk-resize')) return (x0 = null);
     x0 = e.touches[0].clientX;
     y0 = e.touches[0].clientY;
     tm = Date.now();
   }, { passive: true });
   main.addEventListener('touchend', (e) => {
-    if (x0 == null || !DATED.includes(route.view)) return;
+    if (x0 == null || !DATED.includes(route.view) || gestureBusy()) return (x0 = null);
     const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
     x0 = null;
     if (Date.now() - tm > 600 || Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
@@ -431,7 +440,13 @@ function onRoute() {
   const r = parseHash();
   if (r.view === 'list' && (route.view !== 'list' || r.date !== route.date)) listView.reset();
   route = r;
-  render();
+  // Slide between dates with the View Transitions API where the browser has it.
+  const dir = navDir;
+  navDir = 0;
+  if (dir && document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.dataset.nav = dir > 0 ? 'fwd' : 'back';
+    document.startViewTransition(() => render());
+  } else render();
 }
 
 function boot() {
@@ -440,6 +455,7 @@ function boot() {
   initActions();
   registerActions();
   initSwipe();
+  initGestures(document.getElementById('main'), { rerender: render });
   initKeys();
   subscribe(render);
   window.addEventListener('hashchange', onRoute);
