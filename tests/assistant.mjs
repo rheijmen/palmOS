@@ -52,17 +52,17 @@ await ctx.route('https://api.anthropic.com/**', async (route) => {
 
 await p.goto(BASE + '/index.html'); await p.waitForTimeout(500);
 await p.click('[data-w=demo]'); await p.waitForTimeout(400);
-ok(await p.locator('.kitt-strip').count() === 1, 'assistant strip shows on today\'s agenda');
+ok(await p.locator('.pilot-strip').count() === 1, 'assistant strip shows on today\'s agenda');
 
 // Offline mode
 await p.click('#btn-ai'); await p.waitForTimeout(600);
-ok(await p.locator('.sheet-kitt .voice-box .vb-col').count() === 3, 'dashboard with three-column voice box');
-await p.fill('.kitt-input input', 'Remind me to buy milk tomorrow');
-await p.press('.kitt-input input', 'Enter'); await p.waitForTimeout(500);
+ok(await p.locator('.sheet-pilot .voice-box .vb-col').count() === 3, 'dashboard with three-column voice box');
+await p.fill('.pilot-input input', 'Remind me to buy milk tomorrow');
+await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(500);
 let st = await p.evaluate(() => JSON.parse(localStorage.getItem('agendus.v1')));
 ok(st.tasks.some(t => t.title === 'Buy milk' && t.due === tomorrow), 'offline: "remind me to" adds a task for tomorrow');
-await p.fill('.kitt-input input', "What's next?");
-await p.press('.kitt-input input', 'Enter'); await p.waitForTimeout(400);
+await p.fill('.pilot-input input', "What's next?");
+await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(400);
 ok((await p.locator('.kl.ai').last().textContent()).includes('Next up'), 'offline: what\'s next answers from the agenda');
 await p.keyboard.press('Escape'); await p.waitForTimeout(400);
 
@@ -78,8 +78,8 @@ await p.locator('.card', { hasText: 'Claude API key' }).scrollIntoViewIfNeeded()
 // Claude mode with tools
 await p.evaluate(() => location.hash = '#/agenda/' + new Date().toISOString().slice(0, 10)); await p.waitForTimeout(400);
 await p.click('#btn-ai'); await p.waitForTimeout(500);
-await p.fill('.kitt-input input', 'Plan lunch with Kristine tomorrow at half past twelve');
-await p.press('.kitt-input input', 'Enter'); await p.waitForTimeout(2500);
+await p.fill('.pilot-input input', 'Plan lunch with Kristine tomorrow at half past twelve');
+await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(2500);
 st = await p.evaluate(() => JSON.parse(localStorage.getItem('agendus.v1')));
 const lunch = st.events.find(e => e.title === 'Lunch with Kristine' && e.start === `${tomorrow}T12:30`);
 ok(!!lunch, 'tool call created the appointment');
@@ -100,11 +100,11 @@ st = await p.evaluate(() => JSON.parse(localStorage.getItem('agendus.v1')));
 ok(!st.events.some(e => e.title === 'Lunch with Kristine' && e.start === `${tomorrow}T12:30`), 'Undo reverts the assistant\'s change');
 
 // Auth error handling
-await p.fill('.kitt-input input', 'bad key please');
-await p.press('.kitt-input input', 'Enter'); await p.waitForTimeout(2500);
+await p.fill('.pilot-input input', 'bad key please');
+await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(2500);
 ok((await p.locator('.kl.ai.err').last().textContent()).toLowerCase().includes('api key'), 'auth error explains what to do');
-await p.fill('.kitt-input input', 'Plan lunch with Kristine tomorrow at half past twelve');
-await p.press('.kitt-input input', 'Enter'); await p.waitForTimeout(2500);
+await p.fill('.pilot-input input', 'Plan lunch with Kristine tomorrow at half past twelve');
+await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(2500);
 const last = requests.at(-1).body.messages;
 ok(last.filter(m => m.role === 'user' && m.content.some?.(c => c.type === 'text' && /bad key/.test(c.text))).length === 0, 'failed turn is dropped from history');
 

@@ -51,10 +51,10 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
 - Haptic feedback on Android, pages slide when you change dates
 
 **Assistant ("Pilot", rename it to whatever you like)**
-- Talk to your agenda: tap the little red scanner in the title bar (or press `k`), tap **Talk** and speak, or type
+- Talk to your agenda: tap the little display in the title bar (or press `k`), tap **Talk** and speak, or type
 - It reads and changes your agenda for you: "move the dentist to Friday at 3", "what does tomorrow look like?", "remind me to call Kristine after lunch", "text William I'm running late"
 - It speaks up by itself: a strip on today's Agenda points out what's next, clashes, days without a break, overdue tasks (with one-tap "move to today"), birthdays and early starts. Opening the assistant reads the news aloud; reminders are spoken too
-- Interface: a 1980s car-computer dashboard. A red scanner sweeps while it thinks, a three-column voice box pulses while it talks, and amber lamps show what's on
+- Interface: in the Agendus 2007 style, with a nod to the talking cars of 1980s TV. A glossy LCD shows a light that sweeps while it thinks and a three-column voice box that lights up while it talks; jelly lamps show what's on, and the conversation runs in speech bubbles. Classic Palm gets a green Palm LCD, Modern stays flat
 - Every change it makes can be undone with one tap
 - Works without AI too: offline it understands "what's next", "today", "tomorrow" and "remind me to..."
 
@@ -129,7 +129,7 @@ js/ai/insights.js     Proactive tips and the spoken briefing
 js/ai/panel.js        The dashboard and the Agenda strip
 js/ai/voice.js        Speech in/out and the voice box
 js/vendor/            Anthropic SDK, bundled for the browser
-css/assistant.css     The dashboard look
+css/assistant.css     How Pilot looks in each style
 js/interop.js         .ics and .vcf import/export
 js/i18n.js            Translation and date formatting
 js/strings.js         English and Dutch strings
