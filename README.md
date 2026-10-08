@@ -50,6 +50,19 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
 - With a mouse, everything drags straight away (no long-press needed)
 - Haptic feedback on Android, pages slide when you change dates
 
+**Assistant ("Pilot", rename it to whatever you like)**
+- Talk to your agenda: tap the little red scanner in the title bar (or press `k`), tap **Talk** and speak, or type
+- It reads and changes your agenda for you: "move the dentist to Friday at 3", "what does tomorrow look like?", "remind me to call Kristine after lunch", "text William I'm running late"
+- It speaks up by itself: a strip on today's Agenda points out what's next, clashes, days without a break, overdue tasks (with one-tap "move to today"), birthdays and early starts. Opening the assistant reads the news aloud; reminders are spoken too
+- Interface: a 1980s car-computer dashboard. A red scanner sweeps while it thinks, a three-column voice box pulses while it talks, and amber lamps show what's on
+- Every change it makes can be undone with one tap
+- Works without AI too: offline it understands "what's next", "today", "tomorrow" and "remind me to..."
+
+To let it understand everything, add a Claude API key in **Preferences > Assistant** (get one at console.anthropic.com, and set a monthly spending limit there). Notes:
+- The key is stored on this device only and sent only to Anthropic. It is not in your backups. Fine for a personal app; a public version should route requests through its own server instead.
+- Default model is Claude Opus 5.5 at low effort, so answers are quick. Switch to Sonnet 5.5 or Haiku 5.5 (much cheaper) in Preferences. If Claude declines a request, a fallback model takes over automatically.
+- Voice uses the browser's built-in speech recognition and voices. On iPhone, the microphone button may be missing in the home-screen app; the keyboard's dictation microphone works everywhere.
+
 **Everything else**
 - Global search across appointments, tasks, contacts and memos
 - Category filter on every screen
@@ -57,7 +70,7 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
 - English and Dutch (follows your device language, or set it in Preferences)
 - Looks: **Agendus 2007** (default, glossy 2007-era style, light and night versions), Modern (flat), and **Classic Palm**
 - Import/export: `.ics` (Google, Apple, Outlook calendars), `.vcf` (contacts), and full JSON backups
-- Keyboard shortcuts on desktop: `a` agenda, `d` `w` `m` `y` `l` views, `t` today, arrows to move, `n` new, `/` search
+- Keyboard shortcuts on desktop: `a` agenda, `d` `w` `m` `y` `l` views, `t` today, arrows to move, `n` new, `/` search, `k` assistant
 
 ## Run it locally
 
@@ -96,6 +109,7 @@ Runs two checks in a headless phone-sized browser:
 
 - `tests/e2e.mjs`: creating and editing appointments (including a single occurrence of a repeating one), undo, tasks and repeating tasks, contacts and birthdays, search, the back button, date navigation, memo autosave, `.ics`/`.vcf` round trips, the recurrence rules, and a no-horizontal-scroll check on a 360px screen.
 - `tests/gestures.mjs`: real touch input for long-press dragging, resizing, create-by-drag, month drag, repeating-appointment moves and task swipes, plus mouse dragging in the week view.
+- `tests/assistant.mjs`: offline commands, the API key settings, and the full Claude tool loop against a mocked API (request headers, fallback, tool calls, undo, error handling). No real key needed and nothing is billed.
 
 ## Project structure
 
@@ -110,6 +124,12 @@ js/recur.js           Repeat rules
 js/editors.js         Detail and edit sheets, pickers, follow-ups
 js/reminders.js       Alarms, snooze, notifications
 js/gestures.js        Drag, resize and swipe
+js/ai/assistant.js    Conversation with Claude, tools, offline commands
+js/ai/insights.js     Proactive tips and the spoken briefing
+js/ai/panel.js        The dashboard and the Agenda strip
+js/ai/voice.js        Speech in/out and the voice box
+js/vendor/            Anthropic SDK, bundled for the browser
+css/assistant.css     The dashboard look
 js/interop.js         .ics and .vcf import/export
 js/i18n.js            Translation and date formatting
 js/strings.js         English and Dutch strings

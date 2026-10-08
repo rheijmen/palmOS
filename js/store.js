@@ -18,6 +18,14 @@ export const DEFAULT_SETTINGS = {
   showDoneInAgenda: false,
   showUndatedInAgenda: true,
   calView: 'month',
+  // Assistant
+  aiName: 'Pilot',
+  aiModel: 'claude-opus-5-5',
+  aiSpeak: true,
+  aiVoice: '',
+  aiProactive: true,
+  aiSpeakReminders: true,
+  userName: '',
   category: 'all',
   monthText: true,
 };
@@ -41,6 +49,7 @@ function empty() {
     categories: clone(DEFAULT_CATEGORIES),
     settings: { ...DEFAULT_SETTINGS },
     alarms: { fired: {}, snoozed: [] },
+    ai: { dismissed: null },
   };
 }
 
@@ -65,6 +74,7 @@ function load() {
       ...data,
       settings: { ...base.settings, ...(data.settings || {}) },
       alarms: { ...base.alarms, ...(data.alarms || {}) },
+      ai: { ...base.ai, ...(data.ai || {}) },
     };
   } catch {
     return empty();

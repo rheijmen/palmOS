@@ -16,6 +16,10 @@ import { settingsView } from './views/settings.js';
 import { openEventDetail, openEventEditor, openTaskEditor, openContactDetail, openContactEditor, openMemoEditor, openNewChooser, toggleTask, openDatePicker } from './editors.js';
 import { startReminders, requestNotifications } from './reminders.js';
 import { initGestures, gestureBusy } from './gestures.js';
+import { openAssistant } from './ai/panel.js';
+import { dismissInsight, moveOverdue } from './ai/insights.js';
+import { setApiKey } from './ai/assistant.js';
+import { speak } from './ai/voice.js';
 import { exportICS, importICS, exportVCF, importVCF } from './interop.js';
 
 const VIEWS = { agenda: agendaView, day: dayView, week: weekView, month: monthView, year: yearView, list: listView, tasks: tasksView, contacts: contactsView, memos: memosView, settings: settingsView };
@@ -75,6 +79,9 @@ function renderChrome() {
   sel.closest('.cat-filter').style.setProperty('--cat', cur === 'all' || cur === 'none' ? 'transparent' : catColor(cur));
   sel.closest('.cat-filter').hidden = route.view === 'settings';
 
+  const aiBtn = document.getElementById('btn-ai');
+  aiBtn.innerHTML = '<span class="mini-scanner" aria-hidden="true"><i></i></span>';
+  aiBtn.setAttribute('aria-label', t('ai.talkTo', { name: state.settings.aiName || 'Pilot' }));
   document.getElementById('btn-search').innerHTML = icon('search');
   document.getElementById('btn-search').setAttribute('aria-label', t('common.search'));
   document.getElementById('btn-settings').innerHTML = icon('settings');
@@ -269,6 +276,33 @@ function registerActions() {
   on('title-tap', onTitleTap);
   on('goto-settings', () => go('settings'));
   on('search', openSearch);
+  on('ai-open', () => openAssistant());
+  on('ai-listen', () => openAssistant({ listenNow: true }));
+  on('ai-dismiss', (el) => dismissInsight(el.dataset.id));
+  on('ai-move-overdue', (el) => {
+    moveOverdue(el.dataset.to);
+    toast(t('ai.moved'), { action: t('common.undo'), onAction: undo });
+  });
+  on('ai-gift-task', (el) => {
+    const c = state.contacts.find((x) => x.id === el.dataset.id);
+    if (!c) return;
+    upsert('tasks', { title: t('ai.giftTitle', { name: c.firstName || c.lastName || '' }), due: today(), priority: 2, icon: 'gift', done: false, contactIds: [c.id], categoryId: '' }, { undoable: true });
+    toast(t('task.added'), { action: t('common.undo'), onAction: undo });
+  });
+  on('setting-text', (el) => setSetting(el.dataset.key, el.value.trim()));
+  on('ai-save-key', () => {
+    const v = document.getElementById('ai-key').value.trim();
+    if (v && !/^sk-ant-/.test(v)) return toast(t('ai.keyInvalid'));
+    setApiKey(v);
+    toast(v ? t('ai.keySaved') : t('ai.keyRemoved'));
+    render();
+  });
+  on('ai-forget-key', () => {
+    setApiKey('');
+    toast(t('ai.keyRemoved'));
+    render();
+  });
+  on('ai-test-voice', () => speak(t('ai.voiceTest', { name: state.settings.aiName || 'Pilot' }), { force: true }));
   on('list-more', () => {
     listMore();
     render();
@@ -427,6 +461,7 @@ function initKeys() {
     else if (e.key === 'ArrowLeft' && DATED.includes(route.view)) step(-1);
     else if (e.key === 'ArrowRight' && DATED.includes(route.view)) step(1);
     else if (e.key === 'n') document.getElementById('fab').click();
+    else if (e.key === 'k') openAssistant();
     else if (e.key === '/') {
       e.preventDefault();
       openSearch();
@@ -478,6 +513,8 @@ function boot() {
 
   if (!state.welcomed) setTimeout(showWelcome, 300);
   startReminders();
+  // Speech voices load asynchronously; refresh the voice list in Preferences.
+  if ('speechSynthesis' in window) speechSynthesis.addEventListener?.('voiceschanged', () => route.view === 'settings' && render());
 
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});

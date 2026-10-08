@@ -6,6 +6,7 @@ import { t, fmtDate, relDay } from '../i18n.js';
 import { icon, itemIcon } from '../icons.js';
 import { eventsOnDay, eventsByDay, birthdaysInRange, tasksForAgenda, contactsByIds, contactName, catColor } from '../query.js';
 import { occRow, taskRow, sectionHead, weekStrip, emptyState, avatar, quickActions } from '../components.js';
+import { assistantStrip } from '../ai/panel.js';
 
 export const agendaView = {
   title: (ctx) => (ctx.date === today() ? t('common.today') : fmtDate(ctx.date, { weekday: 'short', day: 'numeric', month: 'short' })),
@@ -35,6 +36,7 @@ export const agendaView = {
     const overdue = tasks.filter((x) => !x.done && x.due && x.due < day).length;
 
     return `
+      ${day === today() ? assistantStrip() : ''}
       ${weekStrip(day, { weekStart: ws, busy })}
       <div class="agenda-summary">
         <span>${icon('calendar', { size: 14 })} ${esc(t('agenda.countEvents', { n: occ.length + bds.length }))}</span>

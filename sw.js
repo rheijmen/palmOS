@@ -1,12 +1,13 @@
 // Offline support: cache the app shell, serve it cache-first, refresh in the background.
 // Bump VERSION when files change so phones pick up the new release.
-const VERSION = 'agendus-v2';
+const VERSION = 'agendus-v3';
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './css/app.css',
   './css/skin-2007.css',
+  './css/assistant.css',
   './assets/icon.svg',
   './assets/icon-192.png',
   './assets/icon-512.png',
@@ -32,6 +33,11 @@ const SHELL = [
   './js/views/memos.js',
   './js/views/settings.js',
   './js/views/tasks.js',
+  './js/ai/assistant.js',
+  './js/ai/insights.js',
+  './js/ai/panel.js',
+  './js/ai/voice.js',
+  './js/vendor/anthropic-sdk.js',
 ];
 
 self.addEventListener('install', (e) => {
