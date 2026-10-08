@@ -21,3 +21,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
+
+## Anthropic TypeScript SDK
+
+`js/vendor/anthropic-sdk.js` is `@anthropic-ai/sdk` 0.132.1, bundled for the browser. MIT License, Copyright 2023 Anthropic, PBC. Full text in `js/vendor/anthropic-sdk.LICENSE.txt`.

@@ -242,24 +242,34 @@ async function askScope(kindKey, { allowFuture = true } = {}) {
 }
 
 export async function deleteEvent(ev, occDay) {
+  let scope = 'all';
   if (ev.repeat?.freq) {
-    const scope = await askScope('scope.deleteTitle', { allowFuture: occDay !== eventStartDay(ev) });
+    scope = await askScope('scope.deleteTitle', { allowFuture: occDay !== eventStartDay(ev) });
     if (!scope) return;
-    if (scope === 'one') {
-      commit((s) => {
-        const x = s.events.find((e) => e.id === ev.id);
-        x.exceptions = [...(x.exceptions || []), occDay];
-      }, { undoable: true });
-    } else if (scope === 'future') {
-      commit((s) => {
-        const x = s.events.find((e) => e.id === ev.id);
-        x.repeat = { ...x.repeat, until: addDays(occDay, -1) };
-      }, { undoable: true });
-    } else remove('events', ev.id);
-  } else {
-    remove('events', ev.id);
   }
+  removeOccurrence(ev, occDay, scope, { undoable: true });
   toast(t('event.deleted'), { action: t('common.undo'), onAction: undo });
+}
+
+// Non-interactive building blocks (also used by the assistant).
+// scope: 'one' | 'future' | 'all'; ignored for appointments that don't repeat.
+export function removeOccurrence(ev, occDay, scope, opts = {}) {
+  if (ev.repeat?.freq && scope === 'one') {
+    commit((s) => {
+      const x = s.events.find((e) => e.id === ev.id);
+      x.exceptions = [...(x.exceptions || []), occDay];
+    }, opts);
+  } else if (ev.repeat?.freq && scope === 'future' && occDay !== eventStartDay(ev)) {
+    commit((s) => {
+      const x = s.events.find((e) => e.id === ev.id);
+      x.repeat = { ...x.repeat, until: addDays(occDay, -1) };
+    }, opts);
+  } else remove('events', ev.id, opts);
+}
+
+export function changeOccurrence(ev, occDay, data, scope) {
+  if (ev.repeat?.freq) saveRecurring(ev, occDay, data, scope === 'future' && occDay === eventStartDay(ev) ? 'all' : scope);
+  else upsert('events', { ...ev, ...data });
 }
 
 // openEventEditor({ id, occDay, day, start, prefill })

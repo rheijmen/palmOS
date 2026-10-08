@@ -5,6 +5,36 @@ import { t, fmtHour } from '../i18n.js';
 import { icon } from '../icons.js';
 import { catName } from '../query.js';
 import { fmtAlarm } from '../i18n.js';
+import { hasAI, MODELS } from '../ai/assistant.js';
+import { canListen, canSpeak, voicesForLanguage } from '../ai/voice.js';
+
+const textInput = (key, value, placeholder = '') =>
+  `<input class="pref-input" data-change="setting-text" data-key="${key}" value="${esc(value || '')}" placeholder="${esc(placeholder)}" autocomplete="off">`;
+
+function assistantCard(s) {
+  const voices = voicesForLanguage();
+  return `
+        <h3 class="section-head"><span>${esc(t('ai.settings.title'))}</span></h3>
+        <div class="card">
+          ${pref(t('ai.settings.name'), textInput('aiName', s.aiName, 'Pilot'))}
+          ${pref(t('ai.settings.userName'), textInput('userName', s.userName, t('ai.settings.userNamePh')))}
+          <div class="pref pref-stack">
+            <span class="pref-label">${esc(t('ai.settings.key'))}<small>${hasAI() ? `<span class="ok-text">${icon('circle-check', { size: 14 })} ${esc(t('ai.settings.connected'))}</span>` : esc(t('ai.settings.keyHint'))}</small></span>
+            <div class="key-row">
+              <input id="ai-key" type="password" autocomplete="off" spellcheck="false" placeholder="${esc(hasAI() ? '••••••••••••' : 'sk-ant-...')}" aria-label="${esc(t('ai.settings.key'))}">
+              <button class="btn btn-small btn-primary" data-act="ai-save-key">${esc(t('common.save'))}</button>
+              ${hasAI() ? `<button class="btn btn-small" data-act="ai-forget-key">${esc(t('ai.settings.forget'))}</button>` : ''}
+            </div>
+            <small class="muted">${esc(t('ai.settings.keyPrivacy'))} <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a></small>
+          </div>
+          ${pref(t('ai.settings.model'), sel('aiModel', MODELS.map((m) => [m.id, m.label]), s.aiModel), t('ai.settings.modelHint'))}
+          ${pref(t('ai.settings.proactive'), toggle('aiProactive', s.aiProactive), t('ai.settings.proactiveHint'))}
+          ${canSpeak() ? pref(t('ai.settings.speak'), toggle('aiSpeak', s.aiSpeak)) : ''}
+          ${canSpeak() ? pref(t('ai.settings.speakReminders'), toggle('aiSpeakReminders', s.aiSpeakReminders)) : ''}
+          ${canSpeak() && voices.length ? pref(t('ai.settings.voice'), `<span class="voice-row">${sel('aiVoice', [['', t('settings.auto')], ...voices.map((v) => [v.voiceURI, v.name])], s.aiVoice)}<button class="icon-btn" data-act="ai-test-voice" aria-label="${esc(t('ai.settings.testVoice'))}">${icon('volume-2', { size: 18 })}</button></span>`) : ''}
+          ${!canListen() ? `<p class="muted small">${esc(t('ai.settings.noMic'))}</p>` : ''}
+        </div>`;
+}
 
 const ALARMS = [null, 0, 5, 10, 15, 30, 60];
 const sel = (key, options, cur) =>
@@ -39,6 +69,8 @@ export const settingsView = {
           ${pref(t('settings.undatedInAgenda'), toggle('showUndatedInAgenda', s.showUndatedInAgenda))}
           ${pref(t('settings.doneInAgenda'), toggle('showDoneInAgenda', s.showDoneInAgenda))}
         </div>
+
+        ${assistantCard(s)}
 
         <h3 class="section-head"><span>${esc(t('settings.notifications'))}</span></h3>
         <div class="card">

@@ -9,6 +9,7 @@ import { icon, itemIcon } from './icons.js';
 import { openSheet, closeSheet, toast } from './ui.js';
 import { occurrencesInRange, makeOcc, contactsByIds, contactName } from './query.js';
 import { toggleTask, openEventDetail, openTaskEditor } from './editors.js';
+import { speak } from './ai/voice.js';
 
 const WINDOW_MS = 6 * 3600 * 1000; // missed alarms older than this are skipped
 const SNOOZES = [1, 3, 5, 10, 15, 30, 60];
@@ -163,6 +164,11 @@ function showNext() {
       setTimeout(showNext, 300);
     },
   });
+  // Say it out loud, like a car computer would.
+  if (state.settings.aiSpeakReminders && !document.hidden) {
+    const who = d.people.length ? `${d.people.map((c) => contactName(c)).join(', ')}. ` : '';
+    speak(`${t('ai.reminderSay', { name: state.settings.userName ? `${state.settings.userName}, ` : '' })} ${d.title}. ${who}${d.when}.`, { force: true });
+  }
 }
 
 function createFollowUp(kind, d) {
