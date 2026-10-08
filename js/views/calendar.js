@@ -1,12 +1,12 @@
 // Calendar views: Day, Week, Month, Year and List.
 import { state } from '../store.js';
-import { esc, today, addDays, addMonths, startOfWeek, parseYmd, daysInMonth, ymd, minutesOfDay, toLocal, isoWeek, diffDays } from '../util.js';
+import { esc, today, addDays, addMonths, startOfWeek, parseYmd, daysInMonth, ymd, minutesOfDay, toLocal, isoWeek, diffDays, minutesBetween } from '../util.js';
 import { t, fmtDate, fmtHour, fmtTime, fmtMonthYear, weekdayShorts, relDay } from '../i18n.js';
 import { icon, itemIcon } from '../icons.js';
 import { eventsByDay, eventsOnDay, birthdaysInRange, tasksDueOn, catColor, contactName } from '../query.js';
 import { occRow, taskRow, miniMonth, sectionHead, emptyState } from '../components.js';
 
-const HOUR_H = 52;
+export const HOUR_H = 52;
 
 // ---- shared bits ------------------------------------------------------------
 
@@ -37,7 +37,7 @@ function layoutDay(occs, day) {
     .map((o) => {
       const s = o.day < day ? 0 : minutesOfDay(o.start);
       const e = o.endDay > day ? 1440 : minutesOfDay(o.end);
-      return { o, s, e: Math.max(e, s + 15) };
+      return { o, s, e: Math.max(e, s + 15), col0Day: day };
     })
     .sort((a, b) => a.s - b.s || b.e - a.e);
   const clusters = [];
@@ -77,10 +77,15 @@ function block(it, h0, compact) {
   const top = ((it.s - h0 * 60) / 60) * HOUR_H;
   const height = Math.max(20, ((it.e - it.s) / 60) * HOUR_H - 2);
   const w = 100 / it.ncols;
+  // Only blocks that start in this column can be dragged; continuations of
+  // events from the previous day stay put.
+  const movable = it.o.day === it.col0Day;
   return `<button class="blk ${compact ? 'compact' : ''}" data-act="open-occ" data-id="${ev.id}" data-day="${it.o.day}"
+      ${movable ? `data-start="${it.o.start}" data-dur="${minutesBetween(it.o.start, it.o.end)}"` : ''}
       style="top:${top}px;height:${height}px;left:calc(${w * it.col}% + 1px);width:calc(${w}% - 3px);--cat:${catColor(ev.categoryId)}">
     ${ev.icon ? itemIcon(ev.icon, { size: compact ? 14 : 16 }) : ''}
     <span class="blk-text">${compact ? '' : `<b>${fmtTime(it.o.start)}</b> `}${esc(ev.title || t('event.untitled'))}</span>
+    ${movable && height >= 26 ? '<span class="blk-resize" aria-hidden="true"></span>' : ''}
   </button>`;
 }
 
@@ -135,7 +140,7 @@ export const dayView = {
       </div>
       <div class="timegrid" data-scroll-to="${h0}">
         ${hoursColumn(h0, h1)}
-        <div class="tg-cols"><div class="tg-col">${slots(day, h0, h1)}${items.map((it) => block(it, h0, false)).join('')}${nowLine(day, h0, h1)}</div></div>
+        <div class="tg-cols"><div class="tg-col" data-day="${day}">${slots(day, h0, h1)}${items.map((it) => block(it, h0, false)).join('')}${nowLine(day, h0, h1)}</div></div>
       </div>`;
   },
 };
@@ -179,7 +184,7 @@ export const weekView = {
         <div class="tg-cols">${days
           .map((d, i) => {
             const wd = parseYmd(d).getDay();
-            return `<div class="tg-col ${wd === 6 ? 'sat' : ''} ${wd === 0 ? 'sun' : ''}">${slots(d, h0, h1)}${per[i].map((it) => block(it, h0, true)).join('')}${nowLine(d, h0, h1)}</div>`;
+            return `<div class="tg-col ${wd === 6 ? 'sat' : ''} ${wd === 0 ? 'sun' : ''}" data-day="${d}">${slots(d, h0, h1)}${per[i].map((it) => block(it, h0, true)).join('')}${nowLine(d, h0, h1)}</div>`;
           })
           .join('')}</div>
       </div>`;
@@ -212,13 +217,13 @@ export const monthView = {
       const wd = parseYmd(d).getDay();
       const occ = map.get(d) || [];
       const bd = bdMap.get(d) || [];
-      const items = [...bd.map((b) => ({ icon: 'cake', title: contactName(b.contact), cat: b.contact.categoryId })), ...occ.map((o) => ({ icon: o.ev.icon, title: o.ev.title, cat: o.ev.categoryId, allDay: o.allDay || o.day !== o.endDay }))];
+      const items = [...bd.map((b) => ({ icon: 'cake', title: contactName(b.contact), cat: b.contact.categoryId })), ...occ.map((o) => ({ icon: o.ev.icon, title: o.ev.title, cat: o.ev.categoryId, allDay: o.allDay || o.day !== o.endDay, id: o.ev.id, day: o.day }))];
       const max = 3;
       const shown = items.slice(0, max);
       cells += `<button class="mc ${d.slice(0, 7) !== first.slice(0, 7) ? 'out' : ''} ${d === t0 ? 'is-today' : ''} ${d === sel ? 'is-sel' : ''} ${wd === 6 ? 'sat' : ''} ${wd === 0 ? 'sun' : ''}" data-act="select-day" data-day="${d}">
         <span class="mc-num">${parseYmd(d).getDate()}</span>
         <span class="mc-items">${shown
-          .map((it) => `<span class="mc-it ${it.allDay ? 'ad' : ''}" style="--cat:${catColor(it.cat)}">${it.icon ? itemIcon(it.icon, { size: 12 }) : '<i class="mc-dot"></i>'}${showText ? `<span>${esc(it.title || '')}</span>` : ''}</span>`)
+          .map((it) => `<span class="mc-it ${it.allDay ? 'ad' : ''}" ${it.id ? `data-id="${it.id}" data-day="${it.day}"` : ''} style="--cat:${catColor(it.cat)}">${it.icon ? itemIcon(it.icon, { size: 12 }) : '<i class="mc-dot"></i>'}${showText ? `<span>${esc(it.title || '')}</span>` : ''}</span>`)
           .join('')}${items.length > max ? `<span class="mc-more">+${items.length - max}</span>` : ''}</span>
       </button>`;
     }

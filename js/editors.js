@@ -390,6 +390,29 @@ export function openEventEditor({ id, occDay, day, start, prefill } = {}) {
   });
 }
 
+// Move or resize an appointment occurrence (drag and drop). Returns false when
+// the user cancels the "which occurrences" question.
+export async function moveEvent(ev, occDay, start, end) {
+  const data = {
+    title: ev.title, icon: ev.icon || '', allDay: !!ev.allDay, start, end, repeat: ev.repeat ? { ...ev.repeat } : null,
+    alarm: ev.alarm ?? null, categoryId: ev.categoryId || '', location: ev.location || '', contactIds: ev.contactIds || [], notes: ev.notes || '',
+  };
+  const shift = diffDays(occDay, start.slice(0, 10));
+  if (ev.repeat?.freq) {
+    const scope = await askScope('scope.moveTitle', { allowFuture: occDay !== eventStartDay(ev) });
+    if (!scope) return false;
+    // Weekly series keep their weekday pattern, shifted along with the move.
+    if (shift && data.repeat?.freq === 'weekly' && data.repeat.days?.length) data.repeat.days = data.repeat.days.map((d) => (((d + shift) % 7) + 7) % 7);
+    commit(() => {}, { undoable: true, silent: true });
+    saveRecurring(ev, occDay, data, scope);
+  } else {
+    upsert('events', { ...ev, start, end }, { undoable: true });
+  }
+  const when = data.allDay ? relDay(start.slice(0, 10)) : `${relDay(start.slice(0, 10))} ${fmtTime(start)}`;
+  toast(t('event.moved', { when }), { action: t('common.undo'), onAction: undo });
+  return true;
+}
+
 function saveRecurring(existing, od, data, scope) {
   if (scope === 'one') {
     commit((s) => {

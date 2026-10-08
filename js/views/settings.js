@@ -10,7 +10,7 @@ const ALARMS = [null, 0, 5, 10, 15, 30, 60];
 const sel = (key, options, cur) =>
   `<select data-change="setting" data-key="${key}">${options.map(([v, l]) => `<option value="${esc(JSON.stringify(v))}" ${JSON.stringify(v) === JSON.stringify(cur) ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
 const pref = (label, control, hint = '') => `<div class="pref"><span class="pref-label">${esc(label)}${hint ? `<small>${esc(hint)}</small>` : ''}</span>${control}</div>`;
-const toggle = (key, cur) => `<label class="tgl"><input type="checkbox" data-change="setting-bool" data-key="${key}" ${cur ? 'checked' : ''}><span></span></label>`;
+const toggle = (key, cur) => `<label class="tgl"><input type="checkbox" data-change="setting-bool" data-key="${key}" ${cur ? 'checked' : ''}><span data-on="${esc(t('common.on'))}" data-off="${esc(t('common.off'))}"></span></label>`;
 
 export const settingsView = {
   title: () => t('settings.title'),
@@ -23,7 +23,7 @@ export const settingsView = {
         <h3 class="section-head"><span>${esc(t('settings.general'))}</span></h3>
         <div class="card">
           ${pref(t('settings.language'), sel('lang', [['auto', t('settings.auto')], ['en', 'English'], ['nl', 'Nederlands']], s.lang))}
-          ${pref(t('settings.theme'), sel('theme', [['auto', t('settings.auto')], ['light', t('settings.themeLight')], ['dark', t('settings.themeDark')], ['classic', t('settings.themeClassic')]], s.theme))}
+          ${pref(t('settings.theme'), sel('theme', [['auto', t('settings.themeAuto')], ['light', t('settings.themeLight')], ['dark', t('settings.themeDark')], ['modern', t('settings.themeModern')], ['classic', t('settings.themeClassic')]], s.theme))}
           ${pref(t('settings.weekStart'), sel('weekStart', [[1, t('settings.monday')], [0, t('settings.sunday')], [6, t('settings.saturday')]], s.weekStart))}
           ${pref(t('settings.timeFormat'), sel('hour12', [['auto', t('settings.auto')], [false, '13:00'], [true, '1:00 PM']], s.hour12))}
         </div>
