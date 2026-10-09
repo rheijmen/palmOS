@@ -13,9 +13,10 @@ import { localBriefing } from './insights.js';
 
 const KEY_STORE = 'agendus.ai.key'; // kept out of backups on purpose
 export const MODELS = [
-  { id: 'claude-opus-5-5', label: 'Claude Opus 5.5', fallbacks: true },
-  { id: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5', fallbacks: true },
+  // The first one is the default. Haiku has no server-side refusal fallback.
   { id: 'claude-haiku-5-5', label: 'Claude Haiku 5.5', fallbacks: false },
+  { id: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5', fallbacks: true },
+  { id: 'claude-opus-5-5', label: 'Claude Opus 5.5', fallbacks: true },
 ];
 
 export function getApiKey() {

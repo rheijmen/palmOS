@@ -1,6 +1,6 @@
 // Offline support: keep a copy of the app shell for when there is no network.
 // Bump VERSION when the list of files changes.
-const VERSION = 'agendus-v8';
+const VERSION = 'agendus-v9';
 const SHELL = [
   './',
   './index.html',

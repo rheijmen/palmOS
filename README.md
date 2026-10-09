@@ -83,7 +83,7 @@ This is a hobby project that would love company: developers, designers, translat
 
 To let it understand everything, add a Claude API key in **Preferences > Assistant** (get one at console.anthropic.com, and set a monthly spending limit there). Notes:
 - The key is stored on this device only and sent only to Anthropic. It is not in your backups. Fine for a personal app; a public version should route requests through its own server instead.
-- Default model is Claude Opus 5.5 at low effort, so answers are quick. Switch to Sonnet 5.5 or Haiku 5.5 (much cheaper) in Preferences. If Claude declines a request, a fallback model takes over automatically.
+- Default model is Claude Haiku 5.5 at low effort: quick answers for a fraction of a cent each. Switch to Sonnet 5.5 or Opus 5.5 (smarter, pricier) in Preferences. If Claude declines a request, a fallback model takes over automatically.
 - Voice uses the browser's built-in speech recognition and voices. On iPhone, the microphone button may be missing in the home-screen app; the keyboard's dictation microphone works everywhere.
 
 **Sync between devices (optional)**

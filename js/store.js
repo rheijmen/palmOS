@@ -20,7 +20,8 @@ export const DEFAULT_SETTINGS = {
   calView: 'month',
   // Assistant
   aiName: 'Pilot',
-  aiModel: 'claude-opus-5-5',
+  aiModel: 'claude-haiku-5-5',
+  aiModelV: 2, // bumped when the default model changes, see load()
   aiSpeak: true,
   aiVoice: '',
   aiProactive: true,
@@ -71,6 +72,9 @@ function load() {
   try {
     const data = JSON.parse(raw);
     const base = empty();
+    // The default model moved from Opus to Haiku: settings still on the old
+    // default follow along, a model someone picked on purpose stays.
+    if (data.settings && !data.settings.aiModelV && data.settings.aiModel === 'claude-opus-5-5') data.settings.aiModel = base.settings.aiModel;
     return {
       ...base,
       ...data,

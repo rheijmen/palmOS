@@ -90,8 +90,8 @@ ok(await p.locator('.kl.ai').last().locator('[data-k-undo]').count() === 1, 'off
 const r0 = requests[0];
 ok(r0.headers['x-api-key'] === 'sk-ant-test-123', 'sends the key as x-api-key');
 ok(r0.headers['anthropic-dangerous-direct-browser-access'] === 'true', 'browser access header set by SDK');
-ok((r0.headers['anthropic-beta'] || '').includes('server-side-fallback-2026-07-01') && r0.body.fallbacks === 'default', 'refusal fallback enabled');
-ok(r0.body.model === 'claude-opus-5-5' && r0.body.output_config?.effort === 'low', 'default model and low effort');
+ok(r0.body.model === 'claude-haiku-5-5' && r0.body.output_config?.effort === 'low', 'default model is Haiku 5.5, low effort');
+ok(!('fallbacks' in r0.body) && !(r0.headers['anthropic-beta'] || '').includes('server-side-fallback'), 'no refusal fallback on Haiku (not supported there)');
 ok(Array.isArray(r0.body.tools) && r0.body.tools.length === 10 && !r0.body.tool_choice, '10 tools, auto tool choice');
 const r1 = requests[1];
 ok(r1.body.messages.length === 3 && r1.body.messages[1].content[0].type === 'thinking' && r1.body.messages[2].content[0].type === 'tool_result', 'second call appends assistant turn (incl. thinking) and tool result');
@@ -103,10 +103,20 @@ ok(!st.events.some(e => e.title === 'Lunch with Kristine' && e.start === `${tomo
 await p.fill('.pilot-input input', 'bad key please');
 await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(2500);
 ok((await p.locator('.kl.ai.err').last().textContent()).toLowerCase().includes('api key'), 'auth error explains what to do');
+await p.evaluate(async () => (await import('/js/store.js')).setSetting('aiModel', 'claude-opus-5-5'));
 await p.fill('.pilot-input input', 'Plan lunch with Kristine tomorrow at half past twelve');
 await p.press('.pilot-input input', 'Enter'); await p.waitForTimeout(2500);
+const rOpus = requests.at(-1);
+ok(rOpus.body.model === 'claude-opus-5-5' && (rOpus.headers['anthropic-beta'] || '').includes('server-side-fallback-2026-07-01') && rOpus.body.fallbacks === 'default', 'Opus, when picked, gets the refusal fallback');
 const last = requests.at(-1).body.messages;
 ok(last.filter(m => m.role === 'user' && m.content.some?.(c => c.type === 'text' && /bad key/.test(c.text))).length === 0, 'failed turn is dropped from history');
+
+// Default model change: old default moves to Haiku, a deliberate pick stays.
+await p.reload(); await p.waitForTimeout(600);
+ok(await p.evaluate(async () => (await import('/js/store.js')).state.settings.aiModel) === 'claude-opus-5-5', 'a model picked on purpose is kept');
+await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('agendus.v1')); s.settings.aiModel = 'claude-opus-5-5'; delete s.settings.aiModelV; localStorage.setItem('agendus.v1', JSON.stringify(s)); });
+await p.reload(); await p.waitForTimeout(600);
+ok(await p.evaluate(async () => (await import('/js/store.js')).state.settings.aiModel) === 'claude-haiku-5-5', 'settings on the old Opus default move to Haiku');
 
 // Insights
 const ins = await p.evaluate(async () => (await import('/js/ai/insights.js')).computeInsights().map(i => i.id.split('-')[0]));

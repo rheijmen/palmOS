@@ -36,6 +36,9 @@ const S = () => p.evaluate(() => JSON.parse(localStorage.getItem('agendus.v1')))
 await p.goto(`${BASE}/index.html`); await W(600);
 await p.click('[data-w=empty]'); await W();
 ok((await S()).events.length === 0, 'start empty');
+// New appointments start around now; without this their default alarm can go off
+// mid-test (depending on the time of day) and cover the screen.
+await p.evaluate(async () => (await import('./js/store.js')).setSetting('defaultAlarm', null));
 
 // Create event through FAB chooser
 await p.click('#fab'); await W();
