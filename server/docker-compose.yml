@@ -1,0 +1,14 @@
+# Start with: docker compose up -d --build   (settings come from .env)
+services:
+  pocketbase:
+    build: .
+    restart: unless-stopped
+    # With a domain name PocketBase serves HTTPS itself and gets its certificate
+    # from Let's Encrypt automatically. Only the app's own address may call it.
+    command: ["${DOMAIN:?Set DOMAIN in .env}", "--origins=${ALLOWED_ORIGINS:?Set ALLOWED_ORIGINS in .env}"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Database, backups and certificates live here, outside the container.
+      - ./pb_data:/pb/pb_data

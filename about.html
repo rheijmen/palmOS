@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agendus Web</title>
+  <meta name="description" content="The classic Palm OS organizer, rebuilt for your phone. Free, open source, works offline, no account needed.">
+  <meta property="og:title" content="Agendus Web">
+  <meta property="og:description" content="The classic Palm OS organizer, rebuilt for your phone. Free, open source, works offline.">
+  <meta property="og:image" content="https://rheijmen.github.io/palmOS/assets/screens/agenda.jpg">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #e9edf3; --panel: #ffffff; --ink: #1b2230; --muted: #5b6577; --line: #c9d1dd;
+      --blue: #1f5fbf; --blue-2: #3b82e0; --head-1: #f7f9fc; --head-2: #d9e0ea; --accent: #f08a00;
+      --shadow: 0 1px 2px rgba(20, 30, 50, .12), 0 6px 18px rgba(20, 30, 50, .08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #10151f; --panel: #19212e; --ink: #e6ebf3; --muted: #9aa6ba; --line: #2c3748;
+        --blue: #3b82e0; --blue-2: #6aa5f0; --head-1: #243044; --head-2: #19222f;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 18px rgba(0, 0, 0, .3);
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    a { color: var(--blue); }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+
+    header { background: linear-gradient(var(--head-1), var(--head-2)); border-bottom: 3px solid var(--blue); }
+    .bar { display: flex; align-items: flex-end; gap: 12px; padding-top: 14px; }
+    .tab { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px 9px; border-radius: 12px 12px 0 0;
+      background: linear-gradient(#4a8fe6, var(--blue) 55%, #174b9a); color: #fff; font-weight: 700; font-size: 20px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45); text-shadow: 0 1px 1px rgba(0, 0, 0, .3); }
+    .tab img { width: 28px; height: 28px; }
+    .bar nav { margin-left: auto; padding-bottom: 10px; display: flex; gap: 16px; font-size: 15px; }
+    .bar nav a { color: var(--muted); text-decoration: none; }
+    .bar nav a:hover { color: var(--blue); }
+
+    .hero { padding: 40px 0 8px; display: grid; gap: 28px; grid-template-columns: 1.1fr .9fr; align-items: center; }
+    h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -.01em; }
+    .lead { font-size: 19px; color: var(--muted); margin: 0 0 22px; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { display: inline-block; padding: 11px 18px; border-radius: 10px; font-weight: 600; text-decoration: none;
+      border: 1px solid var(--line); background: linear-gradient(var(--panel), var(--head-2)); color: var(--ink); box-shadow: var(--shadow); }
+    .btn-primary { color: #fff; border-color: #174b9a; background: linear-gradient(#5b9bec, var(--blue) 55%, #174b9a);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), var(--shadow); text-shadow: 0 1px 1px rgba(0, 0, 0, .25); }
+    .hero-shot { justify-self: center; width: min(300px, 100%); border-radius: 26px; border: 8px solid #1b2230; box-shadow: var(--shadow); display: block; }
+
+    section { padding: 28px 0; }
+    h2 { display: inline-block; margin: 0 0 16px; padding: 6px 14px; font-size: 18px; color: #fff; border-radius: 8px;
+      background: linear-gradient(#8fa1bb, #6d819f); text-shadow: 0 1px 1px rgba(0, 0, 0, .25); }
+    .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .shots { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .shots figure { margin: 0; }
+    .shots img { width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: var(--shadow); display: block; }
+    .shots figcaption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+    ul.ideas { margin: 0; padding-left: 20px; }
+    ul.ideas li { margin: 4px 0; }
+    .help { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+    .note { border-left: 4px solid var(--accent); }
+
+    footer { padding: 28px 0 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 20px; }
+
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; padding-top: 28px; }
+      .hero-shot { width: min(260px, 80%); }
+      .help { grid-template-columns: 1fr; }
+      .bar nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap bar">
+      <span class="tab"><img src="assets/icon.svg" alt="">Agendus Web</span>
+      <nav><a href="#features">Features</a><a href="#help">Get involved</a><a href="https://github.com/rheijmen/palmOS">Code</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <div>
+        <h1>The Palm organizer you loved, now on your phone.</h1>
+        <p class="lead">Agendus was the agenda app on Palm OS: your appointments, tasks, contacts and notes on one clever "today" screen. Agendus Web brings it back as a modern web app. Free, open source, works offline, and your data stays on your device.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="./?demo#/agenda">Try the demo</a>
+          <a class="btn" href="./">Start fresh</a>
+          <a class="btn" href="https://github.com/rheijmen/palmOS">View the code</a>
+        </div>
+      </div>
+      <img class="hero-shot" src="assets/screens/agenda.jpg" alt="The Agenda screen: today's appointments and tasks in one view" width="390" height="780">
+    </div>
+
+    <section id="features">
+      <h2>What's inside</h2>
+      <div class="cards">
+        <div class="card"><h3>Agenda screen</h3><p>Today's appointments, tasks, birthdays and the people you're meeting, on one page.</p></div>
+        <div class="card"><h3>Every calendar view</h3><p>Day, week, month, year and list. Drag appointments to move them, pull the edge to resize.</p></div>
+        <div class="card"><h3>To Do, contacts, memos</h3><p>Priorities, repeating tasks, contact history and quick notes, all linked together.</p></div>
+        <div class="card"><h3>Three looks</h3><p>Glossy 2007 (light and night), clean Modern, and Classic Palm with the green-grey screen.</p></div>
+        <div class="card"><h3>Private by default</h3><p>No account, no tracking. Everything is stored in your browser and works offline.</p></div>
+        <div class="card"><h3>Optional extras</h3><p>Sync between your devices via your own small server, and a voice assistant with your own AI key.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Have a look</h2>
+      <div class="shots">
+        <figure><img src="assets/screens/agenda.jpg" alt="Agenda screen" loading="lazy" width="390" height="780"><figcaption>Agenda</figcaption></figure>
+        <figure><img src="assets/screens/week.jpg" alt="Week view" loading="lazy" width="390" height="780"><figcaption>Week</figcaption></figure>
+        <figure><img src="assets/screens/month.jpg" alt="Month view" loading="lazy" width="390" height="780"><figcaption>Month</figcaption></figure>
+        <figure><img src="assets/screens/year.jpg" alt="Year view at night" loading="lazy" width="390" height="780"><figcaption>Year, night look</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="help">
+      <h2>Get involved</h2>
+      <p>This is a hobby project and it would love company. Developers, designers, translators and Palm veterans are all welcome.</p>
+      <div class="help">
+        <div class="card">
+          <h3>Ideas on the wish list</h3>
+          <ul class="ideas">
+            <li>More languages (it speaks English and Dutch today)</li>
+            <li>Accessibility improvements</li>
+            <li>Calendar subscriptions and CalDAV sync</li>
+            <li>End-to-end encrypted sync</li>
+            <li>A wide "Palm Desktop" layout for tablets and computers</li>
+            <li>Handwriting input in the spirit of Graffiti</li>
+          </ul>
+        </div>
+        <div class="card note">
+          <h3>How to join</h3>
+          <p>Try the demo and open an <a href="https://github.com/rheijmen/palmOS/issues">issue</a> with what you found or what you'd like to build. Read the <a href="https://github.com/rheijmen/palmOS/blob/main/CONTRIBUTING.md">contributing guide</a> for how the code is set up: plain HTML, CSS and JavaScript, no build step.</p>
+          <p style="margin-top:10px">Still have the original Agendus on an old Palm, or screenshots and manuals? Those help a lot too.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Agendus Web is open source under the <a href="https://github.com/rheijmen/palmOS/blob/main/LICENSE">MIT license</a>.
+      Agendus was a product of Iambic Inc. This project is an independent tribute and is not affiliated with Iambic.
+    </div>
+  </footer>
+</body>
+</html>
