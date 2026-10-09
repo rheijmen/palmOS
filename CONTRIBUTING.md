@@ -1,6 +1,6 @@
-# Contributing to Agendus Web
+# Contributing to PalmOS Agenda
 
-Thanks for stopping by. Agendus Web brings back the Palm OS organizer that a lot of us
+Thanks for stopping by. PalmOS Agenda brings back the Palm OS organizer that a lot of us
 lived in around 2005, rebuilt as a modern web app: works offline, lives on your home
 screen, no account needed. Help of any size is welcome, from a typo fix to a whole new
 feature.
@@ -49,7 +49,7 @@ A few house rules keep the app small and fast:
   vendored into `js/vendor/` with its license.
 - Every user-facing text goes through `t()` and gets both an English and a Dutch entry.
 - Mobile first: check your change on a 360px wide screen, and in the three looks
-  (Agendus 2007, Modern, Classic Palm).
+  (2007 light and night, Modern, Classic Palm).
 - Add or update a check in `tests/` for behaviour you change.
 - Bump `VERSION` in `sw.js` when you change files the app loads, so installed apps update.
 

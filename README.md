@@ -1,6 +1,6 @@
-# Agendus Web
+# PalmOS Agenda
 
-A mobile-first web version of **Agendus**, the classic Palm OS organizer by Iambic. Appointments, tasks, contacts and memos in one place, with the Agenda screen that made Agendus famous: everything you need for today on one page.
+The classic Palm OS organizer, rebuilt for your phone. A tribute to **Agendus** by Iambic, the agenda app many Palm users lived in. Appointments, tasks, contacts and memos in one place, with the Agenda screen that made Agendus famous: everything you need for today on one page.
 
 It's a Progressive Web App. Open it in a browser, add it to your home screen, and it works offline. No account needed: your data stays on your device. Want the same agenda on your phone and laptop? Run the small sync server in `server/` on your own VPS.
 
@@ -11,6 +11,17 @@ It's a Progressive Web App. Open it in a browser, add it to your home screen, an
   <img src="assets/screens/week.jpg" alt="Week view" width="200">
   <img src="assets/screens/year.jpg" alt="Year view, night look" width="200">
 </p>
+
+## Looks like 2007, thinks like 2027
+
+Meet **Pilot**, a K.I.T.T.-style assistant that actually works. Like the talking car from Knight Rider: smart, a bit chatty, with a reassuringly simple interface. It speaks first (what's next, clashes, overdue tasks), does the work ("move my dentist to Friday", with one tap to undo), and listens and talks back. Simple commands work offline; for free conversation you add your own AI key, which stays on your device.
+
+## Style is everything
+
+| 2007 light and night | Modern | Classic Palm |
+| --- | --- | --- |
+| <img src="assets/screens/style-2007-light.jpg" alt="2007 light" width="140"> <img src="assets/screens/style-2007-dark.jpg" alt="2007 night" width="140"> | <img src="assets/screens/style-modern.jpg" alt="Modern" width="140"> | <img src="assets/screens/style-classic.jpg" alt="Classic Palm" width="140"> |
+| Aqua is the GOAT | Looks like anything these days | Your minimalistic friend |
 
 ## Looking for collaborators
 
@@ -66,7 +77,7 @@ This is a hobby project that would love company: developers, designers, translat
 - Talk to your agenda: tap the little display in the title bar (or press `k`), tap **Talk** and speak, or type
 - It reads and changes your agenda for you: "move the dentist to Friday at 3", "what does tomorrow look like?", "remind me to call Kristine after lunch", "text William I'm running late"
 - It speaks up by itself: a strip on today's Agenda points out what's next, clashes, days without a break, overdue tasks (with one-tap "move to today"), birthdays and early starts. Opening the assistant reads the news aloud; reminders are spoken too
-- Interface: in the Agendus 2007 style, with a nod to the talking cars of 1980s TV. A glossy display shows a light that sweeps while it thinks and an orange three-column visualizer that lights up while it talks; the conversation runs in speech bubbles. Classic Palm gets a green Palm LCD, Modern stays flat
+- Interface: in the 2007 Aqua style, with a nod to the talking cars of 1980s TV. A glossy display shows a light that sweeps while it thinks and an orange three-column visualizer that lights up while it talks; the conversation runs in speech bubbles. Classic Palm gets a green Palm LCD, Modern stays flat
 - Every change it makes can be undone with one tap
 - Works without AI too: offline it understands "what's next", "today", "tomorrow" and "remind me to..."
 
@@ -87,7 +98,7 @@ To let it understand everything, add a Claude API key in **Preferences > Assista
 - Category filter on every screen
 - Undo after deleting or completing
 - English and Dutch (follows your device language, or set it in Preferences)
-- Looks: **Agendus 2007** (default, glossy 2007-era style, light and night versions), Modern (flat), and **Classic Palm**
+- Looks: **2007 Aqua** (default, glossy 2007-era style, light and night versions), **Modern** (flat), and **Classic Palm** (the green-grey Palm screen)
 - Import/export: `.ics` (Google, Apple, Outlook calendars), `.vcf` (contacts), and full JSON backups
 - Keyboard shortcuts on desktop: `a` agenda, `d` `w` `m` `y` `l` views, `t` today, arrows to move, `n` new, `/` search, `k` assistant
 
@@ -144,7 +155,7 @@ POCKETBASE=/path/to/pocketbase npm run test:sync
 index.html            App shell
 about.html            Project information page
 css/app.css           Layout, themes and gesture styles
-css/skin-2007.css     The "Agendus 2007" look
+css/skin-2007.css     The glossy 2007 Aqua look
 js/app.js             Routing, title bar, toolbar, global actions
 js/store.js           Data, persistence, undo, sample data
 js/query.js           Occurrences, filters, search
@@ -172,4 +183,4 @@ server/               Sync server: Docker setup, database rules, setup guide
 
 MIT, see [LICENSE](LICENSE). Third-party parts are listed in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
-Agendus was a product of Iambic Inc. This project is an independent tribute and is not affiliated with Iambic.
+Agendus was a product of Iambic Inc. Palm and Palm OS are trademarks of their respective owners. This project is an independent tribute and is not affiliated with Iambic or the owners of Palm.

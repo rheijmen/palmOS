@@ -114,7 +114,7 @@ function renderChrome() {
   fab.hidden = route.view === 'settings';
   fab.innerHTML = icon('plus', { size: 26 });
   fab.setAttribute('aria-label', t(route.view === 'tasks' ? 'task.new' : route.view === 'contacts' ? 'contact.new' : route.view === 'memos' ? 'memo.new' : route.view === 'agenda' ? 'common.new' : 'event.new'));
-  document.title = `${v.title(route)} · Agendus`;
+  document.title = `${v.title(route)} · PalmOS Agenda`;
 }
 
 function render() {

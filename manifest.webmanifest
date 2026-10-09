@@ -1,7 +1,7 @@
 {
-  "name": "Agendus Web",
-  "short_name": "Agendus",
-  "description": "Agenda, calendar, tasks, contacts and memos in one place. A tribute to Agendus for Palm OS.",
+  "name": "PalmOS Agenda",
+  "short_name": "Agenda",
+  "description": "Agenda, calendar, tasks, contacts and memos in one place. A tribute to the Palm OS organizers.",
   "start_url": "./#/agenda",
   "scope": "./",
   "display": "standalone",

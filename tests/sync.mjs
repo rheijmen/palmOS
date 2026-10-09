@@ -71,6 +71,8 @@ async function device(name, { demo = false } = {}) {
   p.on('console', (m) => m.type() === 'error' && !/status of 40[03]/.test(m.text()) && errs.push(name + ' ' + m.text()));
   await p.goto(APP + '/index.html'); await W(p, 500);
   await p.click(demo ? '[data-w=demo]' : '[data-w=empty]'); await W(p);
+  // The sample agenda has alarms; one going off mid-test would cover the buttons.
+  if (demo) await p.evaluate(async () => (await import('./js/store.js')).commit((s) => { s.events.forEach((e) => (e.alarm = null)); s.tasks.forEach((t) => (t.alarmAt = null)); }));
   return { p, ctx };
 }
 async function signIn(p, email, pass = 'secret-pass-1') {

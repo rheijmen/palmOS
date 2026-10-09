@@ -1,6 +1,6 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-// Agendus sync: one "records" collection holds every synced item (appointments,
+// PalmOS Agenda sync: one "records" collection holds every synced item (appointments,
 // tasks, contacts, memos, categories, preferences) as JSON, one row per item per
 // user. Each user can only see and change their own rows. Accounts are created by
 // the server owner in the dashboard; public sign-up is switched off.
@@ -45,7 +45,7 @@ migrate(
     app.save(records);
 
     const settings = app.settings();
-    settings.meta.appName = "Agendus Sync";
+    settings.meta.appName = "PalmOS Agenda Sync";
     // The app uploads changes in batches.
     settings.batch.enabled = true;
     settings.batch.maxRequests = 100;

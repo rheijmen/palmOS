@@ -219,7 +219,7 @@ export const STRINGS = {
     'memo.placeholder': 'Start typing. The first line becomes the title.',
     'memo.deleted': 'Memo deleted',
 
-    'reminder.title': 'Agendus Reminder',
+    'reminder.title': 'Reminder',
     'reminder.followUp': 'Follow-up',
     'reminder.snooze': 'Snooze',
     'reminder.none': 'None',
@@ -236,7 +236,7 @@ export const STRINGS = {
     'search.none': 'Nothing found for "{q}".',
     'search.appointments': 'Appointments',
 
-    'welcome.title': 'Welcome to Agendus',
+    'welcome.title': 'Welcome to PalmOS Agenda',
     'welcome.text': 'The classic Palm organizer, rebuilt for your phone. Everything you plan stays on this device.',
     'welcome.f1': 'Agenda: appointments, tasks and people for today on one screen',
     'welcome.f2': 'Day, week, month, year and list views',
@@ -395,7 +395,7 @@ export const STRINGS = {
     'settings.doneInAgenda': 'Completed tasks in agenda',
     'settings.notifications': 'Alarms',
     'settings.notifyStatus': 'System notifications',
-    'settings.notifyHint': 'Alarms ring while Agendus is open or in the background. Install it on your home screen for the best result.',
+    'settings.notifyHint': 'Alarms ring while the app is open or in the background. Install it on your home screen for the best result.',
     'settings.notifyEnable': 'Turn on',
     'settings.notifyOn': 'Notifications are on',
     'settings.notifyDenied': 'Notifications are blocked. Allow them in your browser settings.',
@@ -428,7 +428,7 @@ export const STRINGS = {
     'settings.erase': 'Erase everything',
     'settings.eraseConfirm': 'Delete all appointments, tasks, contacts and memos?',
     'settings.erased': 'Everything erased',
-    'settings.about': 'Agendus Web. A tribute to Agendus by Iambic for Palm OS.',
+    'settings.about': 'PalmOS Agenda. A tribute to Agendus by Iambic and the Palm OS organizers.',
     'settings.stats': '{e} appointments, {t} tasks, {c} contacts, {m} memos',
   },
 
@@ -650,7 +650,7 @@ export const STRINGS = {
     'memo.placeholder': 'Begin met typen. De eerste regel wordt de titel.',
     'memo.deleted': 'Memo verwijderd',
 
-    'reminder.title': 'Agendus herinnering',
+    'reminder.title': 'Herinnering',
     'reminder.followUp': 'Opvolgen',
     'reminder.snooze': 'Sluimeren',
     'reminder.none': 'Geen',
@@ -667,7 +667,7 @@ export const STRINGS = {
     'search.none': 'Niets gevonden voor "{q}".',
     'search.appointments': 'Afspraken',
 
-    'welcome.title': 'Welkom bij Agendus',
+    'welcome.title': 'Welkom bij PalmOS Agenda',
     'welcome.text': 'De klassieke Palm-organizer, opnieuw gebouwd voor je telefoon. Alles wat je plant blijft op dit apparaat.',
     'welcome.f1': 'Agenda: afspraken, taken en mensen van vandaag op één scherm',
     'welcome.f2': 'Dag, week, maand, jaar en lijst',
@@ -826,7 +826,7 @@ export const STRINGS = {
     'settings.doneInAgenda': 'Afgeronde taken in agenda',
     'settings.notifications': 'Alarmen',
     'settings.notifyStatus': 'Systeemmeldingen',
-    'settings.notifyHint': 'Alarmen gaan af zolang Agendus open is of op de achtergrond draait. Zet de app op je beginscherm voor het beste resultaat.',
+    'settings.notifyHint': 'Alarmen gaan af zolang de app open is of op de achtergrond draait. Zet de app op je beginscherm voor het beste resultaat.',
     'settings.notifyEnable': 'Aanzetten',
     'settings.notifyOn': 'Meldingen staan aan',
     'settings.notifyDenied': 'Meldingen zijn geblokkeerd. Sta ze toe in je browserinstellingen.',
@@ -859,7 +859,7 @@ export const STRINGS = {
     'settings.erase': 'Alles wissen',
     'settings.eraseConfirm': 'Alle afspraken, taken, contacten en memo’s verwijderen?',
     'settings.erased': 'Alles gewist',
-    'settings.about': 'Agendus Web. Een eerbetoon aan Agendus van Iambic voor Palm OS.',
+    'settings.about': 'PalmOS Agenda. Een eerbetoon aan Agendus van Iambic en de organizers van Palm OS.',
     'settings.stats': '{e} afspraken, {t} taken, {c} contacten, {m} memo’s',
 
     'demo.dentist': 'Tandarts',

@@ -39,7 +39,7 @@ function rruleMonthlyWeekday(r, startDay) {
 
 export function exportICS() {
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
-  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Agendus Web//EN', 'CALSCALE:GREGORIAN'];
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PalmOS Agenda//EN', 'CALSCALE:GREGORIAN'];
   const cat = (id) => state.categories.find((c) => c.id === id);
   for (const ev of state.events) {
     L.push('BEGIN:VEVENT', `UID:${ev.id}@agendus-web`, `DTSTAMP:${stamp}`);

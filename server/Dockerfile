@@ -1,4 +1,4 @@
-# Agendus sync server: PocketBase with the Agendus collection built in.
+# PalmOS Agenda sync server: PocketBase with the app's collection built in.
 FROM alpine:3.22
 
 ARG PB_VERSION=0.40.5

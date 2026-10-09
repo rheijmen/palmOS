@@ -1,4 +1,4 @@
-# Agendus sync server
+# PalmOS Agenda sync server
 
 Keeps your agenda in step across your phone, laptop and tablet. It is a single
 [PocketBase](https://pocketbase.io) program (one file, one database) that you run
@@ -75,7 +75,7 @@ admin login. Go to **Collections > users > New record**, fill in an email addres
 and a password, switch on **verified** and save. Do this for yourself and for each
 person you invite.
 
-**8. Connect the app.** In Agendus open **Preferences > Sync**, fill in
+**8. Connect the app.** In PalmOS Agenda open **Preferences > Sync**, fill in
 `https://sync.yourname.nl`, your email and password, and tap **Sign in**. Whatever
 is already on the device is merged into your account. Do the same on your other
 devices.

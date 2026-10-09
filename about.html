@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agendus Web</title>
-  <meta name="description" content="The classic Palm OS organizer, rebuilt for your phone. Free, open source, works offline, no account needed.">
-  <meta property="og:title" content="Agendus Web">
+  <title>PalmOS Agenda</title>
+  <meta name="description" content="The classic Palm OS organizer, rebuilt for your phone. Looks like 2007, thinks like 2027. Free, open source, works offline, no account needed.">
+  <meta property="og:title" content="PalmOS Agenda">
   <meta property="og:description" content="The classic Palm OS organizer, rebuilt for your phone. Free, open source, works offline.">
   <meta property="og:image" content="https://rheijmen.github.io/palmOS/assets/screens/agenda.jpg">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -23,6 +23,7 @@
       }
     }
     * { box-sizing: border-box; }
+    img { height: auto; max-width: 100%; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
     a { color: var(--blue); }
     .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
@@ -60,6 +61,20 @@
     .shots img { width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: var(--shadow); display: block; }
     .shots figcaption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 6px; }
 
+    .kicker { margin: 0 0 6px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+    .split { display: grid; gap: 28px; grid-template-columns: 1.2fr .8fr; align-items: center; }
+    .split h3 { font-size: clamp(24px, 4vw, 32px); line-height: 1.15; margin: 0 0 12px; }
+    .split ul { margin: 14px 0 0; padding-left: 20px; }
+    .split li { margin: 6px 0; }
+    .split img { justify-self: center; width: min(300px, 100%); border-radius: 22px; border: 6px solid #1b2230; box-shadow: var(--shadow); display: block; }
+    .styles { display: grid; gap: 16px; grid-template-columns: 2fr 1fr 1fr; align-items: start; }
+    .style { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; box-shadow: var(--shadow); }
+    .style .pics { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+    .style img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+    .style figcaption { padding: 10px 4px 2px; }
+    .style b { display: block; font-size: 17px; }
+    .style span { color: var(--muted); font-size: 15px; }
+
     ul.ideas { margin: 0; padding-left: 20px; }
     ul.ideas li { margin: 4px 0; }
     .help { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
@@ -70,7 +85,9 @@
     @media (max-width: 720px) {
       .hero { grid-template-columns: 1fr; padding-top: 28px; }
       .hero-shot { width: min(260px, 80%); }
-      .help { grid-template-columns: 1fr; }
+      .help, .split { grid-template-columns: 1fr; }
+      .styles { grid-template-columns: 1fr 1fr; }
+      .styles .wide { grid-column: 1 / -1; }
       .bar nav { display: none; }
     }
   </style>
@@ -78,8 +95,8 @@
 <body>
   <header>
     <div class="wrap bar">
-      <span class="tab"><img src="assets/icon.svg" alt="">Agendus Web</span>
-      <nav><a href="#features">Features</a><a href="#help">Get involved</a><a href="https://github.com/rheijmen/palmOS">Code</a></nav>
+      <span class="tab"><img src="assets/icon.svg" alt="">PalmOS Agenda</span>
+      <nav><a href="#features">Features</a><a href="#pilot">Pilot</a><a href="#styles">Styles</a><a href="#help">Get involved</a><a href="https://github.com/rheijmen/palmOS">Code</a></nav>
     </div>
   </header>
 
@@ -87,14 +104,14 @@
     <div class="hero">
       <div>
         <h1>The Palm organizer you loved, now on your phone.</h1>
-        <p class="lead">Agendus was the agenda app on Palm OS: your appointments, tasks, contacts and notes on one clever "today" screen. Agendus Web brings it back as a modern web app. Free, open source, works offline, and your data stays on your device.</p>
+        <p class="lead">Agendus was the agenda app on Palm OS: your appointments, tasks, contacts and notes on one clever "today" screen. PalmOS Agenda brings it back as a modern web app. Free, open source, works offline, and your data stays on your device.</p>
         <div class="ctas">
           <a class="btn btn-primary" href="./?demo#/agenda">Try the demo</a>
           <a class="btn" href="./">Start fresh</a>
           <a class="btn" href="https://github.com/rheijmen/palmOS">View the code</a>
         </div>
       </div>
-      <img class="hero-shot" src="assets/screens/agenda.jpg" alt="The Agenda screen: today's appointments and tasks in one view" width="390" height="780">
+      <img class="hero-shot" src="assets/screens/agenda.jpg" alt="The Agenda screen: today's appointments and tasks in one view" width="780" height="1560">
     </div>
 
     <section id="features">
@@ -109,13 +126,51 @@
       </div>
     </section>
 
+    <section id="pilot">
+      <div class="split">
+        <div>
+          <p class="kicker">Looks like 2007, thinks like 2027</p>
+          <h3>A K.I.T.T.-style assistant that actually works.</h3>
+          <p>Meet Pilot. Remember the talking car from Knight Rider: smart, a bit chatty, with an interface that was reassuringly simple? Pilot is that, for your agenda. Talk to it, and it talks back.</p>
+          <ul>
+            <li><b>Speaks first.</b> It tells you what's next, spots clashes and overdue tasks, and offers a one-tap fix.</li>
+            <li><b>Does the work.</b> "Move my dentist to Friday", "remind me to call William tomorrow", "plan my week": done, with one tap to undo.</li>
+            <li><b>Voice in, voice out.</b> Tap Talk and speak; it answers out loud.</li>
+            <li><b>Works offline</b> for the basics. For free conversation you add your own AI key, which stays on your device.</li>
+          </ul>
+        </div>
+        <img src="assets/screens/pilot.jpg" alt="Pilot, the assistant, answering what's on today" loading="lazy" width="780" height="1880">
+      </div>
+    </section>
+
+    <section id="styles">
+      <h2>Style is everything</h2>
+      <div class="styles">
+        <figure class="style wide">
+          <div class="pics">
+            <img src="assets/screens/style-2007-light.jpg" alt="2007 Aqua, light" loading="lazy" width="780" height="1560">
+            <img src="assets/screens/style-2007-dark.jpg" alt="2007 Aqua, night" loading="lazy" width="780" height="1560">
+          </div>
+          <figcaption><b>2007 light and night</b><span>Aqua is the GOAT. Glossy buttons, glass and pinstripes, with a night mode that follows your phone.</span></figcaption>
+        </figure>
+        <figure class="style">
+          <img src="assets/screens/style-modern.jpg" alt="Modern look" loading="lazy" width="780" height="1560">
+          <figcaption><b>Modern</b><span>Looks like anything these days.</span></figcaption>
+        </figure>
+        <figure class="style">
+          <img src="assets/screens/style-classic.jpg" alt="Classic Palm look" loading="lazy" width="780" height="1560">
+          <figcaption><b>Classic Palm</b><span>Your minimalistic friend.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
     <section>
       <h2>Have a look</h2>
       <div class="shots">
-        <figure><img src="assets/screens/agenda.jpg" alt="Agenda screen" loading="lazy" width="390" height="780"><figcaption>Agenda</figcaption></figure>
-        <figure><img src="assets/screens/week.jpg" alt="Week view" loading="lazy" width="390" height="780"><figcaption>Week</figcaption></figure>
-        <figure><img src="assets/screens/month.jpg" alt="Month view" loading="lazy" width="390" height="780"><figcaption>Month</figcaption></figure>
-        <figure><img src="assets/screens/year.jpg" alt="Year view at night" loading="lazy" width="390" height="780"><figcaption>Year, night look</figcaption></figure>
+        <figure><img src="assets/screens/agenda.jpg" alt="Agenda screen" loading="lazy" width="780" height="1560"><figcaption>Agenda</figcaption></figure>
+        <figure><img src="assets/screens/week.jpg" alt="Week view" loading="lazy" width="780" height="1560"><figcaption>Week</figcaption></figure>
+        <figure><img src="assets/screens/month.jpg" alt="Month view" loading="lazy" width="780" height="1560"><figcaption>Month</figcaption></figure>
+        <figure><img src="assets/screens/year.jpg" alt="Year view at night" loading="lazy" width="780" height="1560"><figcaption>Year, night look</figcaption></figure>
       </div>
     </section>
 
@@ -145,8 +200,8 @@
 
   <footer>
     <div class="wrap">
-      Agendus Web is open source under the <a href="https://github.com/rheijmen/palmOS/blob/main/LICENSE">MIT license</a>.
-      Agendus was a product of Iambic Inc. This project is an independent tribute and is not affiliated with Iambic.
+      PalmOS Agenda is open source under the <a href="https://github.com/rheijmen/palmOS/blob/main/LICENSE">MIT license</a>.
+      Agendus was a product of Iambic Inc. Palm and Palm OS are trademarks of their respective owners. This project is an independent tribute and is not affiliated with Iambic or the owners of Palm.
     </div>
   </footer>
 </body>
